@@ -1,0 +1,14 @@
+- name: 创建目录
+  file: path={{tmp_path}} state=directory
+  
+- name: 上传扫描脚本(tomcat_baseline_scanner.sh)
+  synchronize: mode=push src={{scanner_path}}/tomcat_baseline_scanner.sh dest={{tmp_path}}
+
+- name: 增加执行权限(tomcat_baseline_scanner.sh)
+  command: chmod +x {{tmp_path}}/tomcat_baseline_scanner.sh
+  
+- name: 执行扫描脚本(tomcat_baseline_scanner.sh)
+  command: bash {{tmp_path}}/tomcat_baseline_scanner.sh
+  
+- name: 获取扫描结果(tomcat_baseline_scanner.sh)
+  synchronize: mode=pull src=/tmp/{{ip}}_tomcat_info.xml dest={{info_path}}

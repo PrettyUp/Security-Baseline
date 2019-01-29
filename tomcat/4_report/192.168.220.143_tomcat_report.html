@@ -1,0 +1,259 @@
+<!Doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>192.168.220.143_Tomcat基线扫描报告</title>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<script src="bootstrap/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap/js/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="highcharts/highcharts.js"></script>
+<script src="highcharts/highcharts-3d.js"></script>
+<script src="highcharts/exporting.js"></script>
+</head>
+<body>
+<div class="container">
+<br /><h3 style="text-align:center;">Tomcat基线扫描报告</h3>
+<br /></div>
+<div class="container">
+<h4>1. 主机基本信息</h4>
+<br /><table id="hostinfo" class="table table-striped table-bordered">
+<tr><th>主机名</th><td>ls-virtual-machine</td><th>IP地址</th><td>192.168.220.143</td></tr>
+<tr><th>操作系统</th><td>Ubuntu 16.04.5 LTS</td><th>内核</th><td>4.15.0-43-generic</td></tr>
+<tr><th>TCP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td><th>UDP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td></tr>
+</table>
+</div>
+<br /><div class="container">
+<h4>2. 合规统计信息</h4>
+<br /><div id="pie_container" style="min-width:400px;height:400px"></div></div>
+<br /><div class="container">
+<h4>3. 合规检测项详情</h4>
+<br /><div class="container">
+<div id="accordion1">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse1">删除示例文档</a>
+</div>
+<div id="collapse1" class="collapse" data-parent="#accordion1">
+<div class="card-body" style="padding:0.25rem">
+<table id="ExampleDoc_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/webapps/</td></tr>
+<tr><th>检测命令</th><td>ls -l $dir_name | grep -E "\s+docs$|\s+examples$|\s+host-manager$|\s+manager$|\s+ROOT$"</td></tr>
+<tr><th>检测说明</th><td>删除示例文档</td></tr>
+<tr><th>检测结果</th><td></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion2">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse2">禁用tomcat默认帐号</a>
+</div>
+<div id="collapse2" class="collapse" data-parent="#accordion2">
+<div class="card-body" style="padding:0.25rem">
+<table id="DefaultAccount_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/conf/tomcat-users.xml</td></tr>
+<tr><th>检测命令</th><td>cat /opt/apache-tomcat-8.5.35/conf/tomcat-users.xml |sed '/</td></tr>
+<tr><th>检测说明</th><td>禁用tomcat默认帐号</td></tr>
+<tr><th>检测结果</th><td></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion3">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse3">禁止列目录</a>
+</div>
+<div id="collapse3" class="collapse" data-parent="#accordion3">
+<div class="card-body" style="padding:0.25rem">
+<table id="ListDir_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/conf/web.xml</td></tr>
+<tr><th>检测命令</th><td>cat /opt/apache-tomcat-8.5.35/conf/web.xml |sed '/</td></tr>
+<tr><th>检测说明</th><td>禁止列目录</td></tr>
+<tr><th>检测结果</th><td>            &lt;param-name&gt;listings&lt;/param-name&gt;<br />            &lt;param-value&gt;false&lt;/param-value&gt;<br />        </td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion4">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse4">自定义错误页面</a>
+</div>
+<div id="collapse4" class="collapse" data-parent="#accordion4">
+<div class="card-body" style="padding:0.25rem">
+<table id="ErrorPage_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/conf/web.xml</td></tr>
+<tr><th>检测命令</th><td>cat /opt/apache-tomcat-8.5.35/conf/web.xml |sed '/</td></tr>
+<tr><th>检测说明</th><td>自定义错误页面</td></tr>
+<tr><th>检测结果</th><td>&lt;check_result&gt;&lt;error-page&gt;<br />&lt;error-code&gt;401&lt;/error-code&gt;<br />&lt;location&gt;/401.htm&lt;/location&gt;<br />&lt;/error-page&gt;<br />&lt;error-page&gt;<br />&lt;error-code&gt;404&lt;/error-code&gt;<br />&lt;location&gt;/404.htm&lt;/location&gt;<br />&lt;/error-page&gt;<br />&lt;error-page&gt;<br />&lt;error-code&gt;500&lt;/error-code&gt;<br />&lt;location&gt;/500.htm&lt;/location&gt;<br />&lt;/error-page&gt;<br />&lt;error-page&gt;<br />&lt;error-code&gt;404&lt;/error-code&gt;<br />&lt;location&gt;404.htm&lt;/location&gt;<br />&lt;/error-page&gt;<br />&lt;error-page&gt;<br />&lt;error-code&gt;500&lt;/error-code&gt;<br />&lt;location&gt;500.htm&lt;/location&gt;<br />&lt;/error-page&gt;&lt;/check_result&gt;<br />				</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion5">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse5">开启访问日志</a>
+</div>
+<div id="collapse5" class="collapse" data-parent="#accordion5">
+<div class="card-body" style="padding:0.25rem">
+<table id="EnableAccessLog_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/conf/server.xml</td></tr>
+<tr><th>检测命令</th><td>cat /opt/apache-tomcat-8.5.35/conf/server.xml |sed '/</td></tr>
+<tr><th>检测说明</th><td>开启访问日志</td></tr>
+<tr><th>检测结果</th><td>        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot; prefix=&quot;localhost_access_log&quot; suffix=&quot;.txt&quot; pattern=&#x27;%h %l %u %t &quot;%r&quot; %s %b&#x27;&gt;&lt;/Valve&gt;</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion6">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse6">隐藏版本号</a>
+</div>
+<div id="collapse6" class="collapse" data-parent="#accordion6">
+<div class="card-body" style="padding:0.25rem">
+<table id="ServerVersion_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/bin/version.sh</td></tr>
+<tr><th>检测命令</th><td>bash /opt/apache-tomcat-8.5.35/bin/version.sh</td></tr>
+<tr><th>检测说明</th><td>隐藏版本号</td></tr>
+<tr><th>检测结果</th><td>Neither the JAVA_HOME nor the JRE_HOME environment variable is defined<br />At least one of these environment variable is needed to run this program</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion7">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse7">修改默认监听端口</a>
+</div>
+<div id="collapse7" class="collapse" data-parent="#accordion7">
+<div class="card-body" style="padding:0.25rem">
+<table id="DefaultPort_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35/conf/server.xml</td></tr>
+<tr><th>检测命令</th><td>cat /opt/apache-tomcat-8.5.35/conf/server.xml |sed '/</td></tr>
+<tr><th>检测说明</th><td>修改默认监听端口</td></tr>
+<tr><th>检测结果</th><td>    &lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; connectionTimeout=&quot;20000&quot; redirectPort=&quot;8443&quot;&gt;&lt;/Connector&gt;</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion8">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse8">不以root/admin用户运行程序</a>
+</div>
+<div id="collapse8" class="collapse" data-parent="#accordion8">
+<div class="card-body" style="padding:0.25rem">
+<table id="ProcessRunner_list" class="table">
+<tr><th>检测项</th><td>/opt/apache-tomcat-8.5.35</td></tr>
+<tr><th>检测命令</th><td>ps -ef |grep /opt/apache-tomcat-8.5.35|grep -v grep</td></tr>
+<tr><th>检测说明</th><td>不以root/admin用户运行程序</td></tr>
+<tr><th>检测结果</th><td>ls        25220      1  0 1月10 ?       00:19:06 /opt/java8/bin/java -Djava.util.logging.config.file=/opt/apache-tomcat-8.5.35/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /opt/apache-tomcat-8.5.35/bin/bootstrap.jar:/opt/apache-tomcat-8.5.35/bin/tomcat-juli.jar -Dcatalina.base=/opt/apache-tomcat-8.5.35 -Dcatalina.home=/opt/apache-tomcat-8.5.35 -Djava.io.tmpdir=/opt/apache-tomcat-8.5.35/temp org.apache.catalina.startup.Bootstrap start</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<br /><br /><div class="container">
+<h4>4. 说明</h4>
+<br /><table id="report_explain" class="table table-striped table-bordered">
+<tr><td><span class="badge badge-danger">红色</span></td><td>不符合配置规范要求，需要进行加固</td></tr>
+<tr><td><span class="badge badge-warning" style="color:#fff;">黄色</span></td><td>不确定是否符合配置规范要求，需要人工介入确认</td></tr>
+<tr><td><span class="badge badge-success">绿色</span></td><td>确认符合配置规范要求，不需要进行修改</td></tr>
+</table>
+</div>
+                <script>
+                    var  chart = Highcharts.chart('pie_container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: '合规检测统计图'
+            },
+            tooltip: {
+                headerFormat: '{series.name}<br>',
+                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    states: {
+                        hover: {
+                            enabled: false
+                        }  
+                    },
+                    slicedOffset: 10,         // 突出间距
+                    point: {                  // 每个扇区是数据点对象，所以事件应该写在 point 下面
+                        events: {
+                            // 鼠标滑过是，突出当前扇区
+                            mouseOver: function() {
+                                this.slice();
+                            },
+                            // 鼠标移出时，收回突出显示
+                            mouseOut: function() {
+                                this.slice();
+                            },
+                            // 默认是点击突出，这里屏蔽掉
+                            click: function() {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '检测项占比',
+                data: [
+                    {name:'合规',   y:6,color:'#28a745'},
+                    {name:'待审查',y: 2,color:'#ffc107'},
+                    {name:'不合规',   y:0,color:'#dc3545'}
+                ]
+            }]
+        });
+                </script>
+</body>
+</html>

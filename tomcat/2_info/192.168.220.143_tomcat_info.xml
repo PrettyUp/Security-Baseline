@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>ls-virtual-machine</hostname>
+		<ipaddr>192.168.220.143</ipaddr>
+		<os_version>	Ubuntu 16.04.5 LTS</os_version>
+		<kernel_version>4.15.0-43-generic</kernel_version>
+		<tcp_services>tcp        0      0 127.0.1.1:53            0.0.0.0:*               LISTEN      1012/dnsmasq    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      972/sshd        
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      110997/cupsd    
+tcp6       0      0 :::8080                 :::*                    LISTEN      25220/java      
+tcp6       0      0 :::22                   :::*                    LISTEN      972/sshd        
+tcp6       0      0 ::1:631                 :::*                    LISTEN      110997/cupsd    
+tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      25220/java      
+tcp6       0      0 :::8009                 :::*                    LISTEN      25220/java      </tcp_services>
+		<udp_services>udp        0      0 0.0.0.0:43036           0.0.0.0:*                           785/avahi-daemon: r
+udp        0      0 127.0.1.1:53            0.0.0.0:*                           1012/dnsmasq    
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           107051/dhclient 
+udp        0      0 0.0.0.0:43357           0.0.0.0:*                           1012/dnsmasq    
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           110998/cups-browsed
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           785/avahi-daemon: r
+udp6       0      0 :::5353                 :::*                                785/avahi-daemon: r
+udp6       0      0 :::38209                :::*                                785/avahi-daemon: r</udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkExampleDoc">
+				<item id="0">
+					<check_object>/opt/apache-tomcat-8.5.35/webapps/</check_object>
+					<check_command>ls -l $dir_name | grep -E "\s+docs$|\s+examples$|\s+host-manager$|\s+manager$|\s+ROOT$"</check_command>
+					<check_comment>删除示例文档</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkDefaultAccount">
+				<item id="1">
+					<check_object>/opt/apache-tomcat-8.5.35/conf/tomcat-users.xml</check_object>
+					<check_command>cat /opt/apache-tomcat-8.5.35/conf/tomcat-users.xml |sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'|sed -n '/user username=.*/p'</check_command>
+					<check_comment>禁用tomcat默认帐号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkListDir">
+				<item id="2">
+					<check_object>/opt/apache-tomcat-8.5.35/conf/web.xml</check_object>
+					<check_command>cat /opt/apache-tomcat-8.5.35/conf/web.xml |sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'|sed -n '/init-param/,/init-param>/p'</check_command>
+					<check_comment>禁止列目录</check_comment>
+					<check_result>        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>fork</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>xpoweredBy</param-name>
+            <param-value>false</param-value>
+        </init-param></check_result>
+				</item>
+		</section>
+		<section id="checkErrorPage">
+				<item id="3">
+					<check_object>/opt/apache-tomcat-8.5.35/conf/web.xml</check_object>
+					<check_command>cat /opt/apache-tomcat-8.5.35/conf/web.xml |sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'|sed -n '/error-page/,/error-page>/p'</check_command>
+					<check_comment>自定义错误页面</check_comment>
+					<check_result><error-page>
+<error-code>401</error-code>
+<location>/401.htm</location>
+</error-page>
+<error-page>
+<error-code>404</error-code>
+<location>/404.htm</location>
+</error-page>
+<error-page>
+<error-code>500</error-code>
+<location>/500.htm</location>
+</error-page>
+<error-page>
+<error-code>404</error-code>
+<location>404.htm</location>
+</error-page>
+<error-page>
+<error-code>500</error-code>
+<location>500.htm</location>
+</error-page></check_result>
+				</item>
+		</section>
+		<section id="checkEnableAccessLog">
+				<item id="4">
+					<check_object>/opt/apache-tomcat-8.5.35/conf/server.xml</check_object>
+					<check_command>cat /opt/apache-tomcat-8.5.35/conf/server.xml |sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'|grep -A 3 -E 'Valve className="org.apache.catalina.valves.AccessLogValve"'</check_command>
+					<check_comment>开启访问日志</check_comment>
+					<check_result>        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" /></check_result>
+				</item>
+		</section>
+		<section id="checkServerVersion">
+				<item id="5">
+					<check_object>/opt/apache-tomcat-8.5.35/bin/version.sh</check_object>
+					<check_command>bash /opt/apache-tomcat-8.5.35/bin/version.sh</check_command>
+					<check_comment>隐藏版本号</check_comment>
+					<check_result>Neither the JAVA_HOME nor the JRE_HOME environment variable is defined
+At least one of these environment variable is needed to run this program</check_result>
+				</item>
+		</section>
+		<section id="checkDefaultPort">
+				<item id="6">
+					<check_object>/opt/apache-tomcat-8.5.35/conf/server.xml</check_object>
+					<check_command>cat /opt/apache-tomcat-8.5.35/conf/server.xml |sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'|grep -A 3 -E '^\s*Connector port=8080'</check_command>
+					<check_comment>修改默认监听端口</check_comment>
+					<check_result>    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" /></check_result>
+				</item>
+		</section>
+		<section id="checkProcessRunner">
+				<item id="7">
+					<check_object>/opt/apache-tomcat-8.5.35</check_object>
+					<check_command>ps -ef |grep /opt/apache-tomcat-8.5.35|grep -v grep</check_command>
+					<check_comment>不以root/admin用户运行程序</check_comment>
+					<check_result>ls        25220      1  0 1月10 ?       00:19:06 /opt/java8/bin/java -Djava.util.logging.config.file=/opt/apache-tomcat-8.5.35/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /opt/apache-tomcat-8.5.35/bin/bootstrap.jar:/opt/apache-tomcat-8.5.35/bin/tomcat-juli.jar -Dcatalina.base=/opt/apache-tomcat-8.5.35 -Dcatalina.home=/opt/apache-tomcat-8.5.35 -Djava.io.tmpdir=/opt/apache-tomcat-8.5.35/temp org.apache.catalina.startup.Bootstrap start</check_result>
+				</item>
+		</section>
+	</checklist>
+</root>

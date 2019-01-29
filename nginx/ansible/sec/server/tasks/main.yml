@@ -1,0 +1,2 @@
+- name: 根据扫描结果，生成修复脚本
+  command: sudo su - root -c "cp {{client_scan_path}}/192.168.0.152_os_info.xml {{client_scan_path}}/192.168.0.152_os_info.sh"

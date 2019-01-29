@@ -1,0 +1,14 @@
+- name: 创建目录
+  file: path={{sec_path}} state=directory owner=root group=root
+  
+- name: 上传扫描脚本(os_baseline_scanner.sh)
+  synchronize: mode=push src={{client_scan_path}}/os_baseline_scanner.sh dest={{sec_path}}
+
+- name: 增加执行权限(os_baseline_scanner.sh)
+  command: sudo su - root -c "chmod +x {{sec_path}}/os_baseline_scanner.sh"
+  
+- name: 执行扫描脚本(os_baseline_scanner.sh)
+  command: sudo su - root -c "{{sec_path}}/os_baseline_scanner.sh"
+  
+- name: 获取扫描结果(os_baseline_scanner.sh)
+  synchronize: mode=pull src=/tmp/{{ip}}_os_info.xml dest={{client_scan_path}}

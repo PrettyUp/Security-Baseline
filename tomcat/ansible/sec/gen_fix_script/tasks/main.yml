@@ -1,0 +1,16 @@
+#- name: 进入解析脚本文件目录
+#  command: sudo su - root -c "cd {{xml_parse_path}}"
+#- name: python version
+#  shell: echo '/opt/miniconda3/bin/python -V' >> /tmp/test.txt
+
+- name: 根据扫描结果，生成报告
+  shell: cd {{xml_parse_path}} && /opt/miniconda3/bin/python tomcat_baseline_parse.py
+
+#- name: 进入修复脚本生成文件目录
+#  command: sudo su - root -c "cd {{html_parse_path}}"
+
+#- name: 根据html报告生成修复文件
+#  command: sudo su - root -c "cd {{html_parse_path}} && python tomcat_baseline_fix.py"
+
+- name: 根据html报告生成修复文件
+  shell: cd {{html_parse_path}} && /opt/miniconda3/bin/python tomcat_baseline_fix.py
