@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<item id=0>
+<fix_time>2019-03-18 星期1 14:36:27</fix_time>
+		<fix_object>^requirepass\s*\w{1,}</fix_object>
+		<fix_command>echo -e "requirepass t*tsrch0st" >> /opt/redis-5.0/conf/redis.conf</fix_command>
+		<fix_comment>为redis设置密码</fix_comment>
+		<fix_result></fix_result>
+	</item>
+</root>

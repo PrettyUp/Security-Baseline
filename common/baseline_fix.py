@@ -1,12 +1,15 @@
+import getopt
 import os
 import re
+import sys
 
 from requests_file import FileAdapter
 from requests_html import HTMLSession
 
 
 class GenFixScript():
-    def __init__(self,ip_addr,baseline_type="OS",base_dir="/opt/apache-tomcat-8.5.35"):
+    def __init__(self,argv,ip_addr,baseline_type="OS",base_dir="/opt/apache-tomcat-8.5.35"):
+        self.parse_argv(argv)
         session = HTMLSession()
         session.mount('file://', FileAdapter())
         # Windows系统路径目录分隔符为反斜杠，但get需要正斜杠所以先进行一下替换
@@ -26,7 +29,23 @@ class GenFixScript():
         self.html_obj = session.get(f'file:///{pwd}/../4_report/{ip_addr}_{baseline_type}_report.html')
         self.shell_script_obj = open(f"../6_fix/{ip_addr}_{baseline_type}_fix.sh","w+",encoding='utf-8',newline='\n')
         self.fix_item_list={}
-        self.gen_shell_script_head_part()
+        # self.gen_shell_script_head_part()
+
+    def usage(self):
+        print(f"""
+Usage:
+  -h, --help        display this help and exit
+
+  example: python3 {self.baseline_type}_baseline_fix.py
+        """)
+
+    def parse_argv(self,argv):
+        opts, args = getopt.getopt(argv, "h", ["help", ])
+        for opt, arg in opts:
+            # -h与--help等价
+            if opt in ("-h", "--help"):
+                self.usage()
+                sys.exit()
 
     def gen_shell_script_head_part(self):
         self.shell_script_obj.writelines("""#!/bin/bash
@@ -63,7 +82,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\\t<item id="\"$id\"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\\t\\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\\t\\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\\t\\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\\t\\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -76,16 +95,26 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             """)
 
@@ -101,18 +130,20 @@ noNeedFixInfo(){
             self.gen_no_need_fix_info()
             self.shell_script_obj.writelines("""
 main(){
+    main_pre $@
     createReportXml
 """)
             self.shell_script_obj.writelines("""\t\tnoNeedFixInfo\n""")
         else:
             self.shell_script_obj.writelines("""
 main(){
+    main_pre $@
     createReportXml
 """)
             for k, v in self.fix_item_list.items():
                 self.shell_script_obj.writelines(f"""\t\t{v}\n""")
-        self.shell_script_obj.writelines("""\tcloseReportXml\n}\n\nmain\n""")
+        self.shell_script_obj.writelines("""\tcloseReportXml\n}\n\nmain $@\n""")
         pass
 
-    def __del__(self):
-        self.gen_shell_script_tail_part()
+    # def __del__(self):
+    #     self.gen_shell_script_tail_part()

@@ -1,0 +1,228 @@
+<!Doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>192.168.220.143_Nginx基线扫描报告</title>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<script src="bootstrap/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap/js/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="highcharts/highcharts.js"></script>
+<script src="highcharts/highcharts-3d.js"></script>
+<script src="highcharts/exporting.js"></script>
+</head>
+<body>
+<div class="container">
+<br /><h3 style="text-align:center;">Nginx基线扫描报告</h3>
+<br /></div>
+<div class="container">
+<h4>1. 主机基本信息</h4>
+<br /><table id="hostinfo" class="table table-striped table-bordered">
+<tr><th>主机名</th><td>ls-virtual-machine</td><th>IP地址</th><td>192.168.220.143</td></tr>
+<tr><th>操作系统</th><td>Ubuntu 16.04.5 LTS</td><th>内核</th><td>4.15.0-43-generic</td></tr>
+<tr><th>TCP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td><th>UDP服务</th><td>0.0.0.0:43036-avahi<br />127.0.1.1:53-dnsmasq<br />0.0.0.0:68-dhclient<br />0.0.0.0:34931-dnsmasq<br />0.0.0.0:631-cups<br />0.0.0.0:5353-avahi<br /></td></tr>
+</table>
+</div>
+<br /><div class="container">
+<h4>2. 合规统计信息</h4>
+<br /><div id="pie_container" style="min-width:400px;height:400px"></div></div>
+<br /><div class="container">
+<h4>3. 合规检测项详情</h4>
+<br /><div class="container">
+<div id="accordion1">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse1">查看nginx版本信息</a>
+</div>
+<div id="collapse1" class="collapse" data-parent="#accordion1">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>System</td></tr>
+<tr><th>检测命令</th><td>nginx -V</td></tr>
+<tr><th>检测说明</th><td>查看nginx的版本信息</td></tr>
+<tr><th>检测结果</th><td>nginx version: nginx/1.10.3 (Ubuntu)
+built with OpenSSL 1.0.2g  1 Mar 2016
+TLS SNI support enabled
+configure arguments: --with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -fPIE -pie -Wl,-z,relro -Wl,-z,now' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-debug --with-pcre-jit --with-ipv6 --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_addition_module --with-http_dav_module --with-http_geoip_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module --with-http_v2_module --with-http_sub_module --with-http_xslt_module --with-stream --with-stream_ssl_module --with-mail --with-mail_ssl_module --with-threads</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion2">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse2">查看nginx是否隐藏版本号</a>
+</div>
+<div id="collapse2" class="collapse" data-parent="#accordion2">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
+<tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf|grep -E ^\s*server_tokens\s*off;</td></tr>
+<tr><th>检测说明</th><td>查看nginx是否隐藏版本号</td></tr>
+<tr><th>检测结果</th><td>	server_tokens off;</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion3">
+<div class="card">
+<div class="card-header bg-danger text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse3">查看user-agent中否配置正确</a>
+</div>
+<div id="collapse3" class="collapse" data-parent="#accordion3">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
+<tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf|grep -A 3 -E ^\s*if\s*\(\s*\$http_user_agent</td></tr>
+<tr><th>检测说明</th><td>查看user-agent中否配置正确</td></tr>
+<tr><th>检测结果</th><td>not found</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion4">
+<div class="card">
+<div class="card-header bg-danger text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse4">是否开启errorlog和accesslog访问日志</a>
+</div>
+<div id="collapse4" class="collapse" data-parent="#accordion4">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
+<tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf|grep -A 3 -E ^\s*log_format\s*main ； 
+ cat /usr/local/nginx/conf/nginx.conf | grep -E ^\s*access_log\s*logs/access.log\s*main;</td></tr>
+<tr><th>检测说明</th><td>检查访问日志是否开启</td></tr>
+<tr><th>检测结果</th><td>        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                  '$status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent""$http_x_forwarded_for"'; ;
+access_log not found</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion5">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse5">是否为特殊文件夹设置白名单IP</a>
+</div>
+<div id="collapse5" class="collapse" data-parent="#accordion5">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
+<tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf | sed -n '/^\s*location[^{]*{/,/ }/'p</td></tr>
+<tr><th>检测说明</th><td>是否为特殊文件夹设置白名单IP</td></tr>
+<tr><th>检测结果</th><td>Location not found</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion6">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse6">禁止访问没有默认页面文件夹时列出目录下所有文件</a>
+</div>
+<div id="collapse6" class="collapse" data-parent="#accordion6">
+<div class="card-body" style="padding:0.25rem">
+<table id="UnnecessaryDevTool_list" class="table">
+<tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
+<tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf | grep -E ^\s*autoindex\s*on</td></tr>
+<tr><th>检测说明</th><td>禁止访问没有默认页面文件夹时列出目录下所有文件</td></tr>
+<tr><th>检测结果</th><td>Autoindex not found</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<br /><br /><div class="container">
+<h4>4. 说明</h4>
+<br /><table id="report_explain" class="table table-striped table-bordered">
+<tr><td><span class="badge badge-danger">红色</span></td><td>不符合配置规范要求，需要进行加固</td></tr>
+<tr><td><span class="badge badge-warning" style="color:#fff;">黄色</span></td><td>不确定是否符合配置规范要求，需要人工介入确认</td></tr>
+<tr><td><span class="badge badge-success">绿色</span></td><td>确认符合配置规范要求，不需要进行修改</td></tr>
+</table>
+</div>
+                <script>
+                    var  chart = Highcharts.chart('pie_container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: '合规检测统计图'
+            },
+            tooltip: {
+                headerFormat: '{series.name}<br>',
+                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    states: {
+                        hover: {
+                            enabled: false
+                        }  
+                    },
+                    slicedOffset: 10,         // 突出间距
+                    point: {                  // 每个扇区是数据点对象，所以事件应该写在 point 下面
+                        events: {
+                            // 鼠标滑过是，突出当前扇区
+                            mouseOver: function() {
+                                this.slice();
+                            },
+                            // 鼠标移出时，收回突出显示
+                            mouseOut: function() {
+                                this.slice();
+                            },
+                            // 默认是点击突出，这里屏蔽掉
+                            click: function() {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '检测项占比',
+                data: [
+                    {name:'合规',   y:2,color:'#28a745'},
+                    {name:'待审查',y: 2,color:'#ffc107'},
+                    {name:'不合规',   y:2,color:'#dc3545'}
+                ]
+            }]
+        });
+                </script>
+</body>
+</html>

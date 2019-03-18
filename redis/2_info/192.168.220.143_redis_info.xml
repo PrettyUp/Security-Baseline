@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>ls-virtual-machine</hostname>
+		<ipaddr>192.168.220.143</ipaddr>
+		<os_version>	Ubuntu 16.04.5 LTS</os_version>
+		<kernel_version>4.15.0-43-generic</kernel_version>
+		<tcp_services>tcp        0      0 127.0.0.1:6379          0.0.0.0:*               LISTEN      58423/redis-server 
+tcp        0      0 127.0.1.1:53            0.0.0.0:*               LISTEN      -               
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -               
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -               
+tcp6       0      0 :::8080                 :::*                    LISTEN      25220/java      
+tcp6       0      0 :::22                   :::*                    LISTEN      -               
+tcp6       0      0 ::1:631                 :::*                    LISTEN      -               
+tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      25220/java      
+tcp6       0      0 :::8009                 :::*                    LISTEN      25220/java      </tcp_services>
+		<udp_services>udp        0      0 0.0.0.0:43036           0.0.0.0:*                           -               
+udp        0      0 127.0.1.1:53            0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:33802           0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -               
+udp6       0      0 :::5353                 :::*                                -               
+udp6       0      0 :::38209                :::*                                -               </udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkRedisPassword">
+				<item id="0">
+					<check_object>^requirepass\s*\w{1,}</check_object>
+					<check_command>searchValueByReg $CONF_PATH $grep_flag</check_command>
+					<check_comment>为redis设置密码</check_comment>
+					<check_result>not found</check_result>
+				</item>
+		</section>
+		<section id="checkRedisAddress">
+				<item id="1">
+					<check_object>^bind\s*</check_object>
+					<check_command>searchValueByReg /opt/redis-5.0/conf/redis.conf ^bind\s*</check_command>
+					<check_comment>建议只监听本地地址</check_comment>
+					<check_result>bind 127.0.0.1</check_result>
+				</item>
+		</section>
+		<section id="checkRedisRunner">
+				<item id="2">
+					<check_object>redis-server</check_object>
+					<check_command>ps -ef |grep redis-server|grep -v grep</check_command>
+					<check_comment>禁止以root用户运行</check_comment>
+					<check_result>ls        58423  58422  0 11:07 pts/3    00:00:16 ../bin/redis-server 127.0.0.1:6379</check_result>
+				</item>
+		</section>
+		<section id="checkRedisVersion">
+				<item id="3">
+					<check_object>$SERVER_PATH</check_object>
+					<check_command>/opt/redis-5.0/bin/redis-server -v</check_command>
+					<check_comment>确认redis是最新版本</check_comment>
+					<check_result>Redis server v=5.0.3 sha=00000000:0 malloc=libc bits=64 build=b2bedaa178448a90</check_result>
+				</item>
+		</section>
+	</checklist>
+</root>

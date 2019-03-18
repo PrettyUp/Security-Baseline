@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<item id=0>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>gcc、gdb</fix_object>
+		<fix_command></fix_command>
+		<fix_comment>检测编译、调试工具是否存在</fix_comment>
+		<fix_result>Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages were automatically installed and are no longer required:
+  libbsd-dev libbz2-dev libffi-dev libgmp-dev libgmpxx4ldbl libncurses5-dev
+  libtinfo-dev linux-headers-4.15.0-29 linux-headers-4.15.0-29-generic
+  linux-image-4.15.0-29-generic linux-modules-4.15.0-29-generic
+  linux-modules-extra-4.15.0-29-generic
+Use 'sudo apt autoremove' to remove them.
+The following packages will be REMOVED:
+  build-essential g++ gcc ghc libghc-bzlib-dev
+0 upgraded, 0 newly installed, 5 to remove and 94 not upgraded.
+After this operation, 464 MB disk space will be freed.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 255701 files and directories currently installed.)
+Removing build-essential (12.1ubuntu2) ...
+Removing g++ (4:5.3.1-1ubuntu1) ...
+Removing libghc-bzlib-dev (0.5.0.5-4) ...
+Removing ghc (7.10.3-7) ...
+Removing gcc (4:5.3.1-1ubuntu1) ...
+Processing triggers for man-db (2.7.5-1) ...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages were automatically installed and are no longer required:
+  libbsd-dev libbz2-dev libffi-dev libgmp-dev libgmpxx4ldbl libncurses5-dev
+  libtinfo-dev linux-headers-4.15.0-29 linux-headers-4.15.0-29-generic
+  linux-image-4.15.0-29-generic linux-modules-4.15.0-29-generic
+  linux-modules-extra-4.15.0-29-generic
+Use 'sudo apt autoremove' to remove them.
+The following packages will be REMOVED:
+  gdb
+0 upgraded, 0 newly installed, 1 to remove and 94 not upgraded.
+After this operation, 7,492 kB disk space will be freed.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 253281 files and directories currently installed.)
+Removing gdb (7.11.1-0ubuntu1~16.5) ...
+Processing triggers for man-db (2.7.5-1) ...</fix_result>
+	</item>
+	<item id=1>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/pam.d/common-password</fix_object>
+		<fix_command>echo '# add by security' >> /etc/pam.d/common-password;echo 'password requisite pam_cracklib.so retry=5 difok=3 minlen=8' >> /etc/pam.d/common-password;</fix_command>
+		<fix_comment>检测是否设置口令复杂度限制</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=2>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/login.defs</fix_object>
+		<fix_command>sed -i 's/^\s*PASS_MAX_DAYS/#PASS_MAX_DAYS/g' /etc/login.defs;echo 'PASS_MAX_DAYS 365' >> /etc/login.defs;</fix_command>
+		<fix_comment>检测是否设置口令有效期限制</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=3>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>syslog</fix_object>
+		<fix_command>systemctl stop syslog ;</fix_command>
+		<fix_comment>检测危险服务是否启动</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=4>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/xinetd.conf</fix_object>
+		<fix_command>chown root:root /etc/xinetd.conf;chmod 600 /etc/xinetd.conf;</fix_command>
+		<fix_comment>check inetd config file permit</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=5>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/services</fix_object>
+		<fix_command>chown root:root /etc/services;chmod 600 /etc/services;</fix_command>
+		<fix_comment>check /etc/services owner and permit</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=6>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/proc/sys/net/ipv4/icmp_echo_ignore_all</fix_object>
+		<fix_command>echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all;echo 'net.ipv4.icmp_echo_ignore_all = 1' >> /etc/sysctl.conf;</fix_command>
+		<fix_comment>check if ping have been closed</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=7>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/host.conf</fix_object>
+		<fix_command>echo '# add by security' >> /etc/host.conf;echo 'nospoof on' >> /etc/host.conf;</fix_command>
+		<fix_comment>check /etc/host.conf</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=8>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/proc/sys/net/ipv4/conf/default/accept_source_route</fix_object>
+		<fix_command>for f in /proc/sys/net/ipv4/conf/*/accept_source_route; do echo 0 > $f; done</fix_command>
+		<fix_comment>check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=9>
+<fix_time>2019-03-14 星期4 13:44:47</fix_time>
+		<fix_object>/etc/init/control-alt-delete.conf</fix_object>
+		<fix_command>sed -i -r 's/^\s*start\s+on\s+control-alt-delete\s*$/#start on control-alt-delete/' /etc/init/control-alt-delete.conf;</fix_command>
+		<fix_comment>check if Control-Alt-Delete have been enabled</fix_comment>
+		<fix_result></fix_result>
+	</item>
+</root>

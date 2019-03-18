@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>jun-virtual-machine</hostname>
+		<ipaddr>192.168.56.138</ipaddr>
+		<os_version>	Ubuntu 18.04.1 LTS</os_version>
+		<kernel_version>4.15.0-29-generic</kernel_version>
+		<tcp_services>tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      13360/mysqld        
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      456/systemd-resolve 
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      11858/sshd          
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      2359/cupsd          
+tcp        0      0 127.0.0.1:9050          0.0.0.0:*               LISTEN      801/tor             
+tcp6       0      0 :::22                   :::*                    LISTEN      11858/sshd          
+tcp6       0      0 ::1:631                 :::*                    LISTEN      2359/cupsd          </tcp_services>
+		<udp_services>udp    19200      0 127.0.0.53:53           0.0.0.0:*                           456/systemd-resolve 
+udp    34816      0 0.0.0.0:68              0.0.0.0:*                           2490/dhclient       
+udp        0      0 0.0.0.0:51689           0.0.0.0:*                           602/avahi-daemon: r 
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           2360/cups-browsed   
+udp     3392      0 0.0.0.0:5353            0.0.0.0:*                           602/avahi-daemon: r 
+udp6       0      0 :::42933                :::*                                602/avahi-daemon: r 
+udp6   45056      0 :::5353                 :::*                                602/avahi-daemon: r </udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkMysqlRunner">
+				<item id="0">
+					<check_object>mysqld</check_object>
+					<check_command>ps -ef |grep mysqld|grep -v grep</check_command>
+					<check_comment>禁止以root用户运行</check_comment>
+					<check_result>mysql     13360      1  0 15:24 ?        00:00:04 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlMaxConnections">
+				<item id="1">
+					<check_object>show variables like 'max_connections';</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "show variables like 'max_connections';"</check_command>
+					<check_comment>设置最大连接数限制</check_comment>
+					<check_result>Variable_name	Value
+max_connections	151</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNullTestAccount">
+				<item id="2">
+					<check_object>select user,host,authentication_string from mysql.user where user = '' or user='test';</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "select user,host,authentication_string from mysql.user where user = '' or user='test';"</check_command>
+					<check_comment>检测是否存在空账号或test账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNoPassword">
+				<item id="3">
+					<check_object>select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"</check_command>
+					<check_comment>检测是否存在密码为空的账号</check_comment>
+					<check_result>user	host	authentication_string
+root	localhost	</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlAccount">
+				<item id="4">
+					<check_object>select user,host,authentication_string from mysql.user;</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "select user,host,authentication_string from mysql.user;"</check_command>
+					<check_comment>分角色创建账号同时删除不必要的账号</check_comment>
+					<check_result>user	host	authentication_string
+root	localhost	
+mysql.session	localhost	*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE
+mysql.sys	localhost	*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE
+debian-sys-maint	localhost	*4F12FEA2DA8B62B5BA12F9F0E540CC68042D24D8
+root	*	*9CFBBC772F3F6C106020035386DA5BBBF1249A11</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlLog">
+				<item id="5">
+					<check_object>show variables like \"log_%\";</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "show variables like \"log_%\";"</check_command>
+					<check_comment>开启日志</check_comment>
+					<check_result>Variable_name	Value
+log_bin	OFF
+log_bin_basename	
+log_bin_index	
+log_bin_trust_function_creators	OFF
+log_bin_use_v1_row_events	OFF
+log_builtin_as_identified_by_password	OFF
+log_error	/var/log/mysql/error.log
+log_error_verbosity	3
+log_output	FILE
+log_queries_not_using_indexes	OFF
+log_slave_updates	OFF
+log_slow_admin_statements	OFF
+log_slow_slave_statements	OFF
+log_statements_unsafe_for_binlog	ON
+log_syslog	OFF
+log_syslog_facility	daemon
+log_syslog_include_pid	ON
+log_syslog_tag	
+log_throttle_queries_not_using_indexes	0
+log_timestamps	UTC
+log_warnings	2</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlVersion">
+				<item id="6">
+					<check_object>select VERSION();</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -u'debian-sys-maint' -p'BJi73yqSq2QAIeJ0' -e "select VERSION();"</check_command>
+					<check_comment>确认mysql是最新版本</check_comment>
+					<check_result>VERSION()
+5.7.21-1ubuntu1</check_result>
+				</item>
+		</section>
+	</checklist>
+</root>

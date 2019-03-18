@@ -1,7 +1,4 @@
-ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
-xml_file_name="/tmp/${ipaddr}_nginx_info.xml"
-CATALINA_HOME='/usr/local/nginx'
-id=0
+#!/bin/bash
 
 createReportXml(){
     echo '<?xml version="1.0" encoding="UTF-8"?>' > $xml_file_name
@@ -152,10 +149,58 @@ checkAutoindex(){
 	fi
 
 	appendToXml "$config_file_name" "$check_command" "$check_comment" "$result"
-	
 
 }
+
+usage(){
+  echo "
+Usage:
+  -i, --ip	target machine ip
+  -d, --dir	target software home dir
+  -h, --help	display this help and exit
+
+  example1: bash tomcat_baseline_scanner.sh
+  example2: bash tomcat_baseline_scanner.sh -i ip_addr -dir home_dir
+  example3: bash tomcat_baseline_scanner.sh --ip ip_addr --dir home_dir
+"
+}
+
+main_pre(){
+    # set -- $(getopt i:p:h "$@")
+    set -- $(getopt -o i:d:h --long ip:,dir:,help -- "$@")
+    ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
+    CATALINA_HOME='/usr/local/nginx'
+    id=0
+    while true
+    do
+      case "$1" in
+      -i|--ip)
+          ipaddr="$2"
+          shift
+          ;;
+      -d|--dir)
+          CATALINA_HOME=="$2"
+          shift
+          ;;
+      -h|--help)
+          usage
+          exit
+          ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "$1 is not option"
+        ;;
+      esac
+      shift
+    done
+    xml_file_name="/tmp/${ipaddr}_nginx_info.xml"
+}
+
 main(){
+    main_pre $@
     createReportXml
         getHostInfo
         createChecklist
@@ -181,7 +226,7 @@ main(){
     closeReportXml
 }
 
-main
+main $@
 
 
 

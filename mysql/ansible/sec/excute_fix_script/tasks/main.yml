@@ -1,0 +1,20 @@
+- name: 创建目录
+  file: path={{tmp_path}} state=directory
+  
+- name: 上传修复脚本
+  synchronize: mode=push src={{fix_path}}/{{ip}}_tomcat_fix.sh dest={{tmp_path}}
+
+- name: 增加执行权限({{ip}}_tomcat_fix.sh)
+  command: chmod +x {{tmp_path}}/{{ip}}_tomcat_fix.sh
+
+- name: 执行修复脚本({{ip}}_tomcat_fix.sh)
+  command: bash {{tmp_path}}/{{ip}}_tomcat_fix.sh
+
+- name: 获取修复日志
+  synchronize: mode=pull src=/tmp/{{ip}}_tomcat_fix.log dest={{log_path}}
+  
+#- name: 执行修复脚本({{ip}}_os_fix.sh)
+#  command: sudo su - root -c "bash {{tmp_path}}/{{ip}}_os_fix.sh"
+  
+#- name: 获取修复日志
+#  synchronize: mode=pull src=/tmp/{{ip}}_os_fix.log dest={{log_path}}

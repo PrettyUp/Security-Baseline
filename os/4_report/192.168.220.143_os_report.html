@@ -20,7 +20,7 @@
 <br /><table id="hostinfo" class="table table-striped table-bordered">
 <tr><th>主机名</th><td>ls-virtual-machine</td><th>IP地址</th><td>192.168.220.143</td></tr>
 <tr><th>操作系统</th><td>Ubuntu 16.04.5 LTS</td><th>内核</th><td>4.15.0-43-generic</td></tr>
-<tr><th>TCP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td><th>UDP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td></tr>
+<tr><th>TCP服务</th><td>127.0.1.1:53-dnsmasq<br />0.0.0.0:22-sshd<br />127.0.0.1:631-cupsd<br /></td><th>UDP服务</th><td>0.0.0.0:43036-avahi<br />127.0.1.1:53-dnsmasq<br />0.0.0.0:68-dhclient<br />0.0.0.0:34931-dnsmasq<br />0.0.0.0:631-cups<br />0.0.0.0:5353-avahi<br /></td></tr>
 </table>
 </div>
 <br /><div class="container">
@@ -113,7 +113,7 @@
 <div class="container">
 <div id="accordion22">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse22">口令复杂度限制</a>
 </div>
 <div id="collapse22" class="collapse" data-parent="#accordion22">
@@ -122,7 +122,7 @@
 <tr><th>检测项</th><td>/etc/pam.d/common-password</td></tr>
 <tr><th>检测命令</th><td>^\s*password\s+requisite\s+pam_cracklib\.so.*</td></tr>
 <tr><th>检测说明</th><td>检测是否设置口令复杂度限制</td></tr>
-<tr><th>检测结果</th><td>password requisite pam_cracklib.so retry=5 difok=3 minlen=8</td></tr>
+<tr><th>检测结果</th><td>not found</td></tr>
 </table>
 </div>
 </div>
@@ -132,7 +132,7 @@
 <div class="container">
 <div id="accordion23">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse23">口令日期限制</a>
 </div>
 <div id="collapse23" class="collapse" data-parent="#accordion23">
@@ -141,7 +141,7 @@
 <tr><th>检测项</th><td>/etc/login.defs</td></tr>
 <tr><th>检测命令</th><td>^\s*PASS_MAX_DAYS\s*[0-9]{,3}\s*$</td></tr>
 <tr><th>检测说明</th><td>检测是否设置口令有效期限制</td></tr>
-<tr><th>检测结果</th><td>PASS_MAX_DAYS 365</td></tr>
+<tr><th>检测结果</th><td>not found</td></tr>
 </table>
 </div>
 </div>
@@ -194,7 +194,7 @@
 
 <script>
     var accordion_obj = document.getElementById("collapse2").previousElementSibling;
-    accordion_obj.setAttribute("class","card-header bg-success text-white")
+    accordion_obj.setAttribute("class","card-header bg-danger text-white")
 </script><div class="container">
 <div id="accordion3">
 <div class="card">
@@ -225,7 +225,7 @@
 <div class="container">
 <div id="accordion32">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse32">/etc/inetd.conf</a>
 </div>
 <div id="collapse32" class="collapse" data-parent="#accordion32">
@@ -234,7 +234,7 @@
 <tr><th>检测项</th><td>/etc/xinetd.conf</td></tr>
 <tr><th>检测命令</th><td>ls -l /etc/xinetd.conf</td></tr>
 <tr><th>检测说明</th><td>check inetd config file permit</td></tr>
-<tr><th>检测结果</th><td>-rw------- 1 root root 289 10月 26  2013 /etc/xinetd.conf</td></tr>
+<tr><th>检测结果</th><td>-rw-r--r-- 1 root root 289 10月 26  2013 /etc/xinetd.conf</td></tr>
 </table>
 </div>
 </div>
@@ -244,7 +244,7 @@
 <div class="container">
 <div id="accordion33">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse33">/etc/services</a>
 </div>
 <div id="collapse33" class="collapse" data-parent="#accordion33">
@@ -253,7 +253,7 @@
 <tr><th>检测项</th><td>/etc/services</td></tr>
 <tr><th>检测命令</th><td>ls -l $file_name</td></tr>
 <tr><th>检测说明</th><td>check /etc/services owner and permit</td></tr>
-<tr><th>检测结果</th><td>-rw------- 1 root root 19605 10月 25  2014 /etc/services</td></tr>
+<tr><th>检测结果</th><td>-rw-r--r-- 1 root root 19605 10月 25  2014 /etc/services</td></tr>
 </table>
 </div>
 </div>
@@ -318,7 +318,7 @@
 <div class="container">
 <div id="accordion42">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse42">系统关闭Ping</a>
 </div>
 <div id="collapse42" class="collapse" data-parent="#accordion42">
@@ -327,7 +327,7 @@
 <tr><th>检测项</th><td>/proc/sys/net/ipv4/icmp_echo_ignore_all</td></tr>
 <tr><th>检测命令</th><td>cat $config_file_name</td></tr>
 <tr><th>检测说明</th><td>check if ping have been closed</td></tr>
-<tr><th>检测结果</th><td>1</td></tr>
+<tr><th>检测结果</th><td>0</td></tr>
 </table>
 </div>
 </div>
@@ -356,7 +356,7 @@
 <div class="container">
 <div id="accordion44">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse44">检测IP欺骗</a>
 </div>
 <div id="collapse44" class="collapse" data-parent="#accordion44">
@@ -365,7 +365,7 @@
 <tr><th>检测项</th><td>/etc/host.conf</td></tr>
 <tr><th>检测命令</th><td>^\s*nospoof\s+on\s*</td></tr>
 <tr><th>检测说明</th><td>check /etc/host.conf</td></tr>
-<tr><th>检测结果</th><td>nospoof on</td></tr>
+<tr><th>检测结果</th><td>not found</td></tr>
 </table>
 </div>
 </div>
@@ -375,13 +375,13 @@
 <div class="container">
 <div id="accordion45">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse45">禁用源路由</a>
 </div>
 <div id="collapse45" class="collapse" data-parent="#accordion45">
 <div class="card-body" style="padding:0.25rem">
 <table id="CtrlAltDelDisable_list" class="table">
-<tr><th>已启用项</th><td></td></tr>
+<tr><th>已启用项</th><td>/proc/sys/net/ipv4/conf/default/accept_source_route<br />/proc/sys/net/ipv4/conf/ens33/accept_source_route<br />/proc/sys/net/ipv4/conf/lo/accept_source_route</td></tr>
 <tr><th>检测命令</th><td>cat /proc/sys/net/ipv4/conf/lo/accept_source_route</td></tr>
 <tr><th>检测说明</th><td>check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not</td></tr>
 <tr><th>所有检测项</th><td>/proc/sys/net/ipv4/conf/all/accept_source_route<br />/proc/sys/net/ipv4/conf/default/accept_source_route<br />/proc/sys/net/ipv4/conf/ens33/accept_source_route<br />/proc/sys/net/ipv4/conf/lo/accept_source_route</td></tr>
@@ -413,7 +413,7 @@
 <div class="container">
 <div id="accordion47">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse47">Control-Alt-Delete 键盘关机命令</a>
 </div>
 <div id="collapse47" class="collapse" data-parent="#accordion47">
@@ -422,7 +422,7 @@
 <tr><th>检测项</th><td>/etc/init/control-alt-delete.conf</td></tr>
 <tr><th>检测命令</th><td>^\s*start\s+on\s+control-alt-delete\s*$</td></tr>
 <tr><th>检测说明</th><td>check if Control-Alt-Delete have been enabled</td></tr>
-<tr><th>检测结果</th><td>not found</td></tr>
+<tr><th>检测结果</th><td>start on control-alt-delete</td></tr>
 </table>
 </div>
 </div>
@@ -437,7 +437,7 @@
 
 <script>
     var accordion_obj = document.getElementById("collapse4").previousElementSibling;
-    accordion_obj.setAttribute("class","card-header bg-warning text-white")
+    accordion_obj.setAttribute("class","card-header bg-danger text-white")
 </script><div class="container">
 <div id="accordion5">
 <div class="card">
@@ -458,7 +458,7 @@
 <tr><th>检测项</th><td>suid</td></tr>
 <tr><th>检测命令</th><td>find / -type f -perm -04000 -o -perm -02000 -exec ls -lg {} \;</td></tr>
 <tr><th>检测说明</th><td>检测suid文件</td></tr>
-<tr><th>检测结果</th><td>drwxrwsrwt 2 root whoopsie 4096 7月  31 08:40 /var/crash<br />drwxrwsr-x 2 root staff 4096 4月  13  2016 /var/local<br />drwxrwsrwt 2 root whoopsie 4096 7月  31 08:40 /var/metrics<br />drwxrwsr-x 2 root mail 4096 7月  31 08:30 /var/mail<br />drwxr-sr-x 93 man root 4096 1月  19 11:37 /var/cache/man<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/cs<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fy<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/he<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ta<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/si<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat4<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/mhr<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nn<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ca<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/km<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat3<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nl<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ast<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr.ISO8859-1<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pa<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/et<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ml<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ru<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/id<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/se<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_AU<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_CA<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_HK<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bs<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/vi<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pt_BR<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bg<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sl<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_CN<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/te<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sv<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ca@valencia<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/uk<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pl<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/gd<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sk<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/it<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/tr<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/gl<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ja<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sq<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ug<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ko<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/es<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bo<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/oc<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/be<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/th<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/my<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pt<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr.UTF-8<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ps<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/az<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ar<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fa<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ro<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/shn<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat8<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ne<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat2<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ms<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_TW<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/io<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/kk<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat5<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hi<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/uz<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/eu<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat1<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hr<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/cy<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/lv<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/de<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_GB<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fi<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hy<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hu<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat6<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr_CA<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/da<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sr<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fo<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ku<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ce<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/lt<br />drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat7<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nb<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bn<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/eo<br />drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/el<br />-rwxr-sr-x 1 root shadow 35632 4月   9  2018 /sbin/pam_extrausers_chkpwd<br />-rwxr-sr-x 1 root shadow 35600 4月   9  2018 /sbin/unix_chkpwd<br />drwxr-s--- 2 root dip 4096 12月 18 06:28 /etc/chatscripts<br />drwxr-s--- 2 root dip 4096 7月  31 08:41 /etc/ppp/peers<br />drwxr-sr-x 3 root systemd-journal 60 1月   4 15:35 /run/log/journal<br />drwxr-s---+ 2 root systemd-journal 200 1月   9 18:54 /run/log/journal/3ed0b126c3c74968a4f6e81bb0d194c8<br />-rwxr-sr-x 1 root utmp 10232 3月  11  2016 /usr/lib/x86_64-linux-gnu/utempter/utempter<br />-rwxr-sr-x 1 root mail 14336 7月  26 03:31 /usr/lib/evolution/camel-lock-helper-1.2<br />drwxrwsr-t 2 root lpadmin 4096 6月  23  2018 /usr/share/ppd/custom<br />drwxrwsr-x 4 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7<br />drwxrwsr-x 2 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7/site-packages<br />drwxrwsr-x 2 root staff 4096 7月  31 08:34 /usr/local/lib/python2.7/dist-packages<br />drwxrwsr-x 3 root staff 4096 7月  31 08:31 /usr/local/lib/python3.5<br />drwxrwsr-x 2 root staff 4096 7月  31 08:31 /usr/local/lib/python3.5/dist-packages<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/fonts<br />drwxrwsr-x 7 root staff 4096 7月  31 08:39 /usr/local/share/sgml<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/misc<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/stylesheet<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/entities<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/dtd<br />drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/declaration<br />drwxrwsr-x 6 root staff 4096 7月  31 08:40 /usr/local/share/xml<br />drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/misc<br />drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/schema<br />drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/entities<br />drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/declaration<br />drwxrwsr-x 3 root staff 4096 7月  31 08:41 /usr/local/share/emacs<br />drwxrwsr-x 2 root staff 4096 7月  31 08:41 /usr/local/share/emacs/site-lisp<br />-rwxr-sr-x 1 root mlocate 39520 11月 18  2014 /usr/bin/mlocate<br />-rwxr-sr-x 1 root tty 27368 5月  16  2018 /usr/bin/wall<br />-rwxr-sr-x 1 root crontab 36080 4月   6  2016 /usr/bin/crontab<br />-rwxr-sr-x 1 root ssh 358624 11月  5 19:26 /usr/bin/ssh-agent<br />-rwxr-sr-x 1 root tty 14752 3月   1  2016 /usr/bin/bsd-write<br />-rwxr-sr-x 1 root shadow 62336 5月  17  2017 /usr/bin/chage<br />-rwxr-sr-x 1 root shadow 22768 5月  17  2017 /usr/bin/expiry</td></tr>
+<tr><th>检测结果</th><td>drwxrwsrwt 2 root whoopsie 4096 7月  31  2018 /var/crash<br />drwxrwsr-x 2 root staff 4096 4月  13  2016 /var/local<br />drwxrwsrwt 2 root whoopsie 4096 7月  31  2018 /var/metrics<br />drwxrwsr-x 2 root mail 4096 7月  31  2018 /var/mail<br />drwxr-sr-x 93 man root 4096 1月  10 07:40 /var/cache/man<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/cs<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fy<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/he<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ta<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/si<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat4<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/mhr<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nn<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ca<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/km<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat3<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nl<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ast<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr.ISO8859-1<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pa<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/et<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ml<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ru<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/id<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/se<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_AU<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_CA<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_HK<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bs<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/vi<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pt_BR<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bg<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sl<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_CN<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/te<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sv<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ca@valencia<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/uk<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pl<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/gd<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sk<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/it<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/tr<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/gl<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ja<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sq<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ug<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ko<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/es<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bo<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/oc<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/be<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/th<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/my<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pt<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr.UTF-8<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ps<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/az<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ar<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fa<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ro<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/shn<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat8<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ne<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat2<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ms<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_TW<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/io<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/kk<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat5<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hi<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/uz<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/eu<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat1<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hr<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/cy<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/lv<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/de<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_GB<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fi<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hy<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hu<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat6<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr_CA<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/da<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sr<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fo<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ku<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ce<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/lt<br />drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat7<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nb<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bn<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/eo<br />drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/el<br />-rwxr-sr-x 1 root shadow 35632 4月   9  2018 /sbin/pam_extrausers_chkpwd<br />-rwxr-sr-x 1 root shadow 35600 4月   9  2018 /sbin/unix_chkpwd<br />drwxr-s--- 2 root dip 4096 12月 18 06:28 /etc/chatscripts<br />drwxr-s--- 2 root dip 4096 7月  31  2018 /etc/ppp/peers<br />drwxr-sr-x 3 root systemd-journal 60 1月   4 15:35 /run/log/journal<br />drwxr-s---+ 2 root systemd-journal 220 3月  14 13:38 /run/log/journal/3ed0b126c3c74968a4f6e81bb0d194c8<br />-rwxr-sr-x 1 root utmp 10232 3月  11  2016 /usr/lib/x86_64-linux-gnu/utempter/utempter<br />-rwxr-sr-x 1 root mail 14336 7月  26  2018 /usr/lib/evolution/camel-lock-helper-1.2<br />drwxrwsr-t 2 root lpadmin 4096 6月  23  2018 /usr/share/ppd/custom<br />drwxrwsr-x 4 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7<br />drwxrwsr-x 2 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7/site-packages<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/lib/python2.7/dist-packages<br />drwxrwsr-x 3 root staff 4096 7月  31  2018 /usr/local/lib/python3.5<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/lib/python3.5/dist-packages<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/fonts<br />drwxrwsr-x 7 root staff 4096 7月  31  2018 /usr/local/share/sgml<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/misc<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/stylesheet<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/entities<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/dtd<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/declaration<br />drwxrwsr-x 6 root staff 4096 7月  31  2018 /usr/local/share/xml<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/misc<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/schema<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/entities<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/declaration<br />drwxrwsr-x 3 root staff 4096 7月  31  2018 /usr/local/share/emacs<br />drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/emacs/site-lisp<br />-rwxr-sr-x 1 root mlocate 39520 11月 18  2014 /usr/bin/mlocate<br />-rwxr-sr-x 1 root tty 27368 5月  16  2018 /usr/bin/wall<br />-rwxr-sr-x 1 root crontab 36080 4月   6  2016 /usr/bin/crontab<br />-rwxr-sr-x 1 root ssh 358624 11月  5 19:26 /usr/bin/ssh-agent<br />-rwxr-sr-x 1 root tty 14752 3月   1  2016 /usr/bin/bsd-write<br />-rwxr-sr-x 1 root shadow 62336 5月  17  2017 /usr/bin/chage<br />-rwxr-sr-x 1 root shadow 22768 5月  17  2017 /usr/bin/expiry</td></tr>
 </table>
 </div>
 </div>
@@ -542,9 +542,9 @@
                 type: 'pie',
                 name: '检测项占比',
                 data: [
-                    {name:'合规',   y:72,color:'#28a745'},
+                    {name:'合规',   y:62,color:'#28a745'},
                     {name:'待审查',y: 2,color:'#ffc107'},
-                    {name:'不合规',   y:3,color:'#dc3545'}
+                    {name:'不合规',   y:13,color:'#dc3545'}
                 ]
             }]
         });

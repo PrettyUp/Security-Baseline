@@ -65,6 +65,22 @@ fixUnnecessaryDevelopTool(){
     appendToXml "$fix_object" "$fix_commgen_shell_script_disable_console_appsand" "$fix_comment" "$fix_result"
 }
                 
+fixPasswordComplexLimit(){
+    fix_object="/etc/pam.d/common-password"
+    fix_comment="检测是否设置口令复杂度限制"
+    fix_command="echo '# add by security' >> /etc/pam.d/common-password;echo 'password requisite pam_cracklib.so retry=5 difok=3 minlen=8' >> /etc/pam.d/common-password;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixPasswordDateLimit(){
+    fix_object="/etc/login.defs"
+    fix_comment="检测是否设置口令有效期限制"
+    fix_command="sed -i 's/^\s*PASS_MAX_DAYS/#PASS_MAX_DAYS/g' /etc/login.defs;echo 'PASS_MAX_DAYS 365' >> /etc/login.defs;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
 fixFilterNetworkService(){
     fix_object="syslog"
     fix_comment="检测危险服务是否启动"
@@ -73,11 +89,102 @@ fixFilterNetworkService(){
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
                 
+fixEtcInetdConf(){
+    fix_object="/etc/xinetd.conf"
+    fix_comment="check inetd config file permit"
+    fix_command="chown root:root /etc/xinetd.conf;chmod 600 /etc/xinetd.conf;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixEtcServices(){
+    fix_object="/etc/services"
+    fix_comment="check /etc/services owner and permit"
+    fix_command="chown root:root /etc/services;chmod 600 /etc/services;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixClosePing(){
+    fix_object="/proc/sys/net/ipv4/icmp_echo_ignore_all"
+    fix_comment="check if ping have been closed"
+    fix_command="echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all;echo 'net.ipv4.icmp_echo_ignore_all = 1' >> /etc/sysctl.conf;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixNoSpoof(){
+    fix_object="/etc/host.conf"
+    fix_comment="check /etc/host.conf"
+    fix_command="echo '# add by security' >> /etc/host.conf;echo 'nospoof on' >> /etc/host.conf;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixDisableSourceRoute(){
+    fix_object="/proc/sys/net/ipv4/conf/default/accept_source_route"
+    fix_comment="check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not"
+    fix_command='for f in /proc/sys/net/ipv4/conf/*/accept_source_route; do echo 0 > $f; done'
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixCtrlAltDelete(){
+    fix_object="/etc/init/control-alt-delete.conf"
+    fix_comment="check if Control-Alt-Delete have been enabled"
+    fix_command="sed -i -r 's/^\s*start\s+on\s+control-alt-delete\s*$/#start on control-alt-delete/' /etc/init/control-alt-delete.conf;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+usage(){
+  echo "
+Usage:
+  -h, --help        display this help and exit
+
+  example(need root right): bash os_baseline_fix.sh
+"
+}
+
+main_pre(){
+    # set -- $(getopt i:p:h "$@")
+    set -- $(getopt -o h --long help -- "$@")
+    ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
+    id=0
+
+    while true
+    do
+      case "$1" in
+      -h|--help)
+          usage
+          exit
+          ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "$1 is not option"
+        ;;
+      esac
+      shift
+    done
+    xml_file_name="/tmp/${ipaddr}_os_fix.log"
+}
 main(){
+    main_pre $@
     createReportXml
 		fixUnnecessaryDevelopTool
+		fixPasswordComplexLimit
+		fixPasswordDateLimit
 		fixFilterNetworkService
+		fixEtcInetdConf
+		fixEtcServices
+		fixClosePing
+		fixNoSpoof
+		fixDisableSourceRoute
+		fixCtrlAltDelete
 	closeReportXml
 }
 
-main
+main $@

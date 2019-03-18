@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>ls-virtual-machine</hostname>
+		<ipaddr>192.168.220.143</ipaddr>
+		<os_version>	Ubuntu 16.04.5 LTS</os_version>
+		<kernel_version>4.15.0-43-generic</kernel_version>
+		<tcp_services>tcp        0      0 127.0.1.1:53            0.0.0.0:*               LISTEN      -               
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -               
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -               
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -               
+tcp6       0      0 :::22                   :::*                    LISTEN      -               
+tcp6       0      0 ::1:631                 :::*                    LISTEN      -               </tcp_services>
+		<udp_services>udp        0      0 127.0.1.1:53            0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:56262           0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:44240           0.0.0.0:*                           -               
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -               
+udp6       0      0 :::35375                :::*                                -               
+udp6       0      0 :::5353                 :::*                                -               </udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkMysqlRunner">
+				<item id="0">
+					<check_object>mysqld</check_object>
+					<check_command>ps -ef |grep mysqld|grep -v grep</check_command>
+					<check_comment>禁止以root用户运行</check_comment>
+					<check_result>mysql     14340      1  0 02:28 ?        00:00:35 /usr/sbin/mysqld</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlMaxConnections">
+				<item id="1">
+					<check_object>show variables like 'max_connections';</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "show variables like 'max_connections';"</check_command>
+					<check_comment>设置最大连接数限制</check_comment>
+					<check_result>Variable_name	Value
+max_connections	151</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNullTestAccount">
+				<item id="2">
+					<check_object>select user,host,authentication_string from mysql.user where user = '' or user='test';</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user where user = '' or user='test';"</check_command>
+					<check_comment>检测是否存在空账号或test账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNoPassword">
+				<item id="3">
+					<check_object>select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"</check_command>
+					<check_comment>检测是否存在密码为空的账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlAccount">
+				<item id="4">
+					<check_object>select user,host,authentication_string from mysql.user;</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user;"</check_command>
+					<check_comment>分角色创建账号同时删除不必要的账号</check_comment>
+					<check_result>user	host	authentication_string
+root	localhost	*9CFBBC772F3F6C106020035386DA5BBBF1249A11
+mysql.sys	localhost	*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE
+debian-sys-maint	localhost	*B568E1252B106C2F43FB8DCDB9ABD7FC9D2AA7DD</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlLog">
+				<item id="5">
+					<check_object>show variables like \"log_%\";</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "show variables like \"log_%\";"</check_command>
+					<check_comment>开启日志</check_comment>
+					<check_result>Variable_name	Value
+log_bin	OFF
+log_bin_basename	
+log_bin_index	
+log_bin_trust_function_creators	OFF
+log_bin_use_v1_row_events	OFF
+log_builtin_as_identified_by_password	OFF
+log_error	/var/log/mysql/error.log
+log_error_verbosity	3
+log_output	FILE
+log_queries_not_using_indexes	OFF
+log_slave_updates	OFF
+log_slow_admin_statements	OFF
+log_slow_slave_statements	OFF
+log_statements_unsafe_for_binlog	ON
+log_syslog	OFF
+log_syslog_facility	daemon
+log_syslog_include_pid	ON
+log_syslog_tag	
+log_throttle_queries_not_using_indexes	0
+log_timestamps	UTC
+log_warnings	2</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlVersion">
+				<item id="6">
+					<check_object>select VERSION();</check_object>
+					<check_command>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select VERSION();"</check_command>
+					<check_comment>确认mysql是最新版本</check_comment>
+					<check_result>VERSION()
+5.7.11-0ubuntu6</check_result>
+				</item>
+		</section>
+	</checklist>
+</root>

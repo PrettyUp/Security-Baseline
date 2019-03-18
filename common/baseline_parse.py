@@ -72,7 +72,7 @@ class BaselineParse:
                     tcp_listen_process_str += f"{listen_addr}-{process}<br />"
 
         udp_listen_process_str = ""
-        for line in tcp_services_lines:
+        for line in udp_services_lines:
             if "tcp6" not in line:
                 listen_addr = re.search(listen_addr_reg, line)
                 if listen_addr is not None:

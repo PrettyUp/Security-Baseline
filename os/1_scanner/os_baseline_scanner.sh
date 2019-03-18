@@ -1,6 +1,4 @@
-ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
-xml_file_name="/tmp/${ipaddr}_os_info.xml"
-id=0
+#!/bin/bash
 
 createReportXml(){
     echo '<root>' > $xml_file_name
@@ -425,8 +423,44 @@ checkSuidFile(){
 # 列出没有nosuid,nodev,noexec的文件系统
 
 # 备份与恢复
+usage(){
+  echo "
+Usage:
+  -h, --help        display this help and exit
+
+  example1[need root privilege]: bash os_baseline_scanner.sh
+  example2[need root privilege]: bash os_baseline_scanner.sh -h
+"
+}
+
+main_pre(){
+    # set -- $(getopt i:p:h "$@")
+    set -- $(getopt -o h --long help -- "$@")
+    ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
+    id=0
+
+    while true
+    do
+      case "$1" in
+      -h|--help)
+          usage
+          exit
+          ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "$1 is not option"
+        ;;
+      esac
+      shift
+    done
+    xml_file_name="/tmp/${ipaddr}_os_info.xml"
+}
 
 main(){
+    main_pre $@
     createReportXml
         getHostInfo
         createChecklist
@@ -504,4 +538,4 @@ main(){
     closeReportXml
 }
 
-main
+main $@

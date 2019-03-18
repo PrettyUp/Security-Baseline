@@ -1,0 +1,14 @@
+- name: 主机安全扫描
+  hosts: sec_target
+  roles:
+    - sec/excute_scanner
+    
+- name: 生成修复脚本
+  hosts: sec_control
+  roles:
+    - sec/gen_fix_script
+
+- name: 执行修复脚本
+  hosts: sec_target
+  roles:
+    - sec/excute_fix_script

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<item id=0>
+<fix_time>2019-03-14 星期4 13:53:35</fix_time>
+		<fix_object>/usr/local/nginx/conf/nginx.conf</fix_object>
+		<fix_command>cd /usr/local/nginx/conf;sed -i -r '/^\s*location[^{]*\{/a\            if ($http_user_agent ~* "java\|3_parse\|perl\|ruby\|curl\|bash\|echo\|uname\|base64\|decode\|md5sum\|select\|concat\|httprequest\|httpclient\|nmap\|scan" ) \{
+                    return 403;
+            \}' nginx.conf; </fix_command>
+		<fix_comment>查看user-agent中否配置正确</fix_comment>
+		<fix_result></fix_result>
+	</item>
+	<item id=1>
+<fix_time>2019-03-14 星期4 13:53:35</fix_time>
+		<fix_object>/usr/local/nginx/conf/nginx.conf</fix_object>
+		<fix_command>cd /usr/local/nginx/conf; sed -i '/^\s*http\s*{/a\    access_log  logs/access.log  main;' nginx.conf; </fix_command>
+		<fix_comment>检查访问日志是否开启</fix_comment>
+		<fix_result></fix_result>
+	</item>
+</root>

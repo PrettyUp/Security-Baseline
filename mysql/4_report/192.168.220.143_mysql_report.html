@@ -1,0 +1,241 @@
+<!Doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>192.168.220.143_Mysql基线扫描报告</title>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<script src="bootstrap/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap/js/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="highcharts/highcharts.js"></script>
+<script src="highcharts/highcharts-3d.js"></script>
+<script src="highcharts/exporting.js"></script>
+</head>
+<body>
+<div class="container">
+<br /><h3 style="text-align:center;">Mysql基线扫描报告</h3>
+<br /></div>
+<div class="container">
+<h4>1. 主机基本信息</h4>
+<br /><table id="hostinfo" class="table table-striped table-bordered">
+<tr><th>主机名</th><td>ls-virtual-machine</td><th>IP地址</th><td>192.168.220.143</td></tr>
+<tr><th>操作系统</th><td>Ubuntu 16.04.5 LTS</td><th>内核</th><td>4.15.0-43-generic</td></tr>
+<tr><th>TCP服务</th><td>127.0.1.1:53--<br />0.0.0.0:22--<br />127.0.0.1:631--<br />127.0.0.1:3306--<br /></td><th>UDP服务</th><td>127.0.1.1:53--<br />0.0.0.0:68--<br />0.0.0.0:631--<br />0.0.0.0:56262--<br />0.0.0.0:44240--<br />0.0.0.0:5353--<br /></td></tr>
+</table>
+</div>
+<br /><div class="container">
+<h4>2. 合规统计信息</h4>
+<br /><div id="pie_container" style="min-width:400px;height:400px"></div></div>
+<br /><div class="container">
+<h4>3. 合规检测项详情</h4>
+<br /><div class="container">
+<div id="accordion1">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse1">禁止以root用户运行</a>
+</div>
+<div id="collapse1" class="collapse" data-parent="#accordion1">
+<div class="card-body" style="padding:0.25rem">
+<table id="ExampleDoc_list" class="table">
+<tr><th>检测项</th><td>mysqld</td></tr>
+<tr><th>检测命令</th><td>ps -ef |grep mysqld|grep -v grep</td></tr>
+<tr><th>检测说明</th><td>禁止以root用户运行</td></tr>
+<tr><th>检测结果</th><td>mysql     14340      1  0 02:28 ?        00:00:35 /usr/sbin/mysqld</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion2">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse2">设置最大连接数限制</a>
+</div>
+<div id="collapse2" class="collapse" data-parent="#accordion2">
+<div class="card-body" style="padding:0.25rem">
+<table id="ExampleDoc_list" class="table">
+<tr><th>检测项</th><td>show variables like 'max_connections';</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "show variables like 'max_connections';"</td></tr>
+<tr><th>检测说明</th><td>设置最大连接数限制</td></tr>
+<tr><th>检测结果</th><td>Variable_name	Value<br />max_connections	151</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion3">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse3">检测是否存在空账号或test账号</a>
+</div>
+<div id="collapse3" class="collapse" data-parent="#accordion3">
+<div class="card-body" style="padding:0.25rem">
+<table id="ExampleDoc_list" class="table">
+<tr><th>检测项</th><td>select user,host,authentication_string from mysql.user where user = '' or user='test';</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user where user = '' or user='test';"</td></tr>
+<tr><th>检测说明</th><td>检测是否存在空账号或test账号</td></tr>
+<tr><th>检测结果</th><td></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion4">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse4">检测是否存在密码为空的账号</a>
+</div>
+<div id="collapse4" class="collapse" data-parent="#accordion4">
+<div class="card-body" style="padding:0.25rem">
+<table id="ExampleDoc_list" class="table">
+<tr><th>检测项</th><td>select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"</td></tr>
+<tr><th>检测说明</th><td>检测是否存在密码为空的账号</td></tr>
+<tr><th>检测结果</th><td></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion5">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse5">分角色创建账号同时删除不必要的账号</a>
+</div>
+<div id="collapse5" class="collapse" data-parent="#accordion5">
+<div class="card-body" style="padding:0.25rem">
+<table id="DefaultAccount_list" class="table">
+<tr><th>检测项</th><td>select user,host,authentication_string from mysql.user;</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select user,host,authentication_string from mysql.user;"</td></tr>
+<tr><th>检测说明</th><td>分角色创建账号同时删除不必要的账号</td></tr>
+<tr><th>检测结果</th><td>user	host	authentication_string<br />root	localhost	*9CFBBC772F3F6C106020035386DA5BBBF1249A11<br />mysql.sys	localhost	*THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE<br />debian-sys-maint	localhost	*B568E1252B106C2F43FB8DCDB9ABD7FC9D2AA7DD</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion6">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse6">开启日志</a>
+</div>
+<div id="collapse6" class="collapse" data-parent="#accordion6">
+<div class="card-body" style="padding:0.25rem">
+<table id="ListDir_list" class="table">
+<tr><th>检测项</th><td>show variables like \"log_%\";</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "show variables like \"log_%\";"</td></tr>
+<tr><th>检测说明</th><td>开启日志</td></tr>
+<tr><th>检测结果</th><td>Variable_name	Value<br />log_bin	OFF<br />log_bin_basename	<br />log_bin_index	<br />log_bin_trust_function_creators	OFF<br />log_bin_use_v1_row_events	OFF<br />log_builtin_as_identified_by_password	OFF<br />log_error	/var/log/mysql/error.log<br />log_error_verbosity	3<br />log_output	FILE<br />log_queries_not_using_indexes	OFF<br />log_slave_updates	OFF<br />log_slow_admin_statements	OFF<br />log_slow_slave_statements	OFF<br />log_statements_unsafe_for_binlog	ON<br />log_syslog	OFF<br />log_syslog_facility	daemon<br />log_syslog_include_pid	ON<br />log_syslog_tag	<br />log_throttle_queries_not_using_indexes	0<br />log_timestamps	UTC<br />log_warnings	2</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion7">
+<div class="card">
+<div class="card-header bg-warning text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse7">确认mysql是最新版本</a>
+</div>
+<div id="collapse7" class="collapse" data-parent="#accordion7">
+<div class="card-body" style="padding:0.25rem">
+<table id="ErrorPage_list" class="table">
+<tr><th>检测项</th><td>select VERSION();</td></tr>
+<tr><th>检测命令</th><td>mysql -h127.0.0.1 -P3306 -uroot -ptoor -e "select VERSION();"</td></tr>
+<tr><th>检测说明</th><td>确认mysql是最新版本</td></tr>
+<tr><th>检测结果</th><td>VERSION()
+5.7.11-0ubuntu6</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<br /><br /><div class="container">
+<h4>4. 说明</h4>
+<br /><table id="report_explain" class="table table-striped table-bordered">
+<tr><td><span class="badge badge-danger">红色</span></td><td>不符合配置规范要求，需要进行加固</td></tr>
+<tr><td><span class="badge badge-warning" style="color:#fff;">黄色</span></td><td>不确定是否符合配置规范要求，需要人工介入确认</td></tr>
+<tr><td><span class="badge badge-success">绿色</span></td><td>确认符合配置规范要求，不需要进行修改</td></tr>
+</table>
+</div>
+                <script>
+                    var  chart = Highcharts.chart('pie_container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: '合规检测统计图'
+            },
+            tooltip: {
+                headerFormat: '{series.name}<br>',
+                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    states: {
+                        hover: {
+                            enabled: false
+                        }  
+                    },
+                    slicedOffset: 10,         // 突出间距
+                    point: {                  // 每个扇区是数据点对象，所以事件应该写在 point 下面
+                        events: {
+                            // 鼠标滑过是，突出当前扇区
+                            mouseOver: function() {
+                                this.slice();
+                            },
+                            // 鼠标移出时，收回突出显示
+                            mouseOut: function() {
+                                this.slice();
+                            },
+                            // 默认是点击突出，这里屏蔽掉
+                            click: function() {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '检测项占比',
+                data: [
+                    {name:'合规',   y:4,color:'#28a745'},
+                    {name:'待审查',y: 3,color:'#ffc107'},
+                    {name:'不合规',   y:0,color:'#dc3545'}
+                ]
+            }]
+        });
+                </script>
+</body>
+</html>

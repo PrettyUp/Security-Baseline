@@ -307,14 +307,15 @@ class GenOSHtmlReport(BaselineParse):
             check_object = item.xpath("check_object")[0].text.strip()
             check_command = item.xpath("check_command")[0].text.strip()
             check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_result = item.xpath("check_result")[0].text
 
             service_list.append(check_object)
-            if "active (running)" in check_result:
+            if check_result is None or "active (running)" not in check_result:
+                self.config_right += 1
+            else:
                 self.config_error += 1
                 active_service_list.append(check_object)
-            else:
-                self.config_right += 1
+
         card_class = "bg-success text-white"
         if len(active_service_list) != 0:
             card_class = "bg-danger text-white"
@@ -707,6 +708,8 @@ if __name__ == "__main__":
     ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
     full_reg = f"{ip_reg}_os_info\.xml"
     pwd_file_list = os.listdir("../2_info")
+    # 当前是针对2_info目录下所有xml进行解析
+    # 如果要针对单个IP，直接指定IP取代这个for循环
     for file in pwd_file_list:
         if re.search(full_reg, file):
             ip_addr = re.search(ip_reg, file).group()

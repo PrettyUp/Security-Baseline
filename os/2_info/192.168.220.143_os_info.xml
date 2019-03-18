@@ -14,7 +14,7 @@ tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      
 tcp6       0      0 :::8009                 :::*                    LISTEN      25220/java      </tcp_services>
 		<udp_services>udp        0      0 0.0.0.0:43036           0.0.0.0:*                           785/avahi-daemon: r
 udp        0      0 127.0.1.1:53            0.0.0.0:*                           1012/dnsmasq    
-udp        0      0 0.0.0.0:68              0.0.0.0:*                           43667/dhclient  
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           43666/dhclient  
 udp        0      0 0.0.0.0:34931           0.0.0.0:*                           1012/dnsmasq    
 udp        0      0 0.0.0.0:631             0.0.0.0:*                           42846/cups-browsed
 udp        0      0 0.0.0.0:5353            0.0.0.0:*                           785/avahi-daemon: r
@@ -174,7 +174,7 @@ udp6       0      0 :::38209                :::*                                
 					<check_object>/etc/pam.d/common-password</check_object>
 					<check_command>^\s*password\s+requisite\s+pam_cracklib\.so.*</check_command>
 					<check_comment>检测是否设置口令复杂度限制</check_comment>
-					<check_result>password requisite pam_cracklib.so retry=5 difok=3 minlen=8</check_result>
+					<check_result>not found</check_result>
 				</item>
 			</node>
 			<node id="PasswdDateLimit">
@@ -182,7 +182,7 @@ udp6       0      0 :::38209                :::*                                
 					<check_object>/etc/login.defs</check_object>
 					<check_command>^\s*PASS_MAX_DAYS\s*[0-9]{,3}\s*$</check_command>
 					<check_comment>检测是否设置口令有效期限制</check_comment>
-					<check_result>PASS_MAX_DAYS 365</check_result>
+					<check_result>not found</check_result>
 				</item>
 			</node>
 			<node id="SuLimit">
@@ -434,15 +434,15 @@ sshd:*:17882:0:99999:7:::</check_result>
 					<check_comment>check if service syslog have been setup</check_comment>
 					<check_result>● rsyslog.service - System Logging Service
    Loaded: loaded (/lib/systemd/system/rsyslog.service; enabled; vendor preset: enabled)
-   Active: active (running) since 六 2019-01-19 11:36:10 CST; 1min 5s ago
+   Active: active (running) since 五 2019-01-04 15:35:54 CST; 2 months 8 days ago
      Docs: man:rsyslogd(8)
            http://www.rsyslog.com/doc/
- Main PID: 46895 (rsyslogd)
+ Main PID: 767 (rsyslogd)
    CGroup: /system.slice/rsyslog.service
-           └─46895 /usr/sbin/rsyslogd -n
+           └─767 /usr/sbin/rsyslogd -n
 
-1月 19 11:36:10 ls-virtual-machine systemd[1]: Starting System Logging Service...
-1月 19 11:36:10 ls-virtual-machine systemd[1]: Started System Logging Service.</check_result>
+1月 04 15:35:53 ls-virtual-machine systemd[1]: Starting System Logging Service...
+1月 04 15:35:54 ls-virtual-machine systemd[1]: Started System Logging Service.</check_result>
 				</item>
 				<item id="46">
 					<check_object>uccp</check_object>
@@ -562,7 +562,7 @@ sshd:*:17882:0:99999:7:::</check_result>
 					<check_object>/etc/xinetd.conf</check_object>
 					<check_command>ls -l /etc/xinetd.conf</check_command>
 					<check_comment>check inetd config file permit</check_comment>
-					<check_result>-rw------- 1 root root 289 10月 26  2013 /etc/xinetd.conf</check_result>
+					<check_result>-rw-r--r-- 1 root root 289 10月 26  2013 /etc/xinetd.conf</check_result>
 				</item>
 			</node>
 			<node id="ServicesPermit">
@@ -570,7 +570,7 @@ sshd:*:17882:0:99999:7:::</check_result>
 					<check_object>/etc/services</check_object>
 					<check_command>ls -l $file_name</check_command>
 					<check_comment>check /etc/services owner and permit</check_comment>
-					<check_result>-rw------- 1 root root 19605 10月 25  2014 /etc/services</check_result>
+					<check_result>-rw-r--r-- 1 root root 19605 10月 25  2014 /etc/services</check_result>
 				</item>
 			</node>
 			<node id="ServicesProcess">
@@ -620,7 +620,7 @@ sshd:*:17882:0:99999:7:::</check_result>
 					<check_object> /proc/sys/net/ipv4/icmp_echo_ignore_all</check_object>
 					<check_command>cat $config_file_name</check_command>
 					<check_comment>check if ping have been closed</check_comment>
-					<check_result>1</check_result>
+					<check_result>0</check_result>
 				</item>
 			</node>
 			<node id="TtyStatus">
@@ -808,7 +808,7 @@ ttysclp0</check_result>
 					<check_object>/etc/host.conf</check_object>
 					<check_command>^\s*nospoof\s+on\s*</check_command>
 					<check_comment>check /etc/host.conf</check_comment>
-					<check_result>nospoof on</check_result>
+					<check_result>not found</check_result>
 				</item>
 			</node>
 			<node id="DisableSourceRoute">
@@ -822,19 +822,19 @@ ttysclp0</check_result>
 					<check_object>/proc/sys/net/ipv4/conf/default/accept_source_route</check_object>
 					<check_command>cat /proc/sys/net/ipv4/conf/default/accept_source_route</check_command>
 					<check_comment>check if /proc/sys/net/ipv4/conf/default/accept_source_route source route have been closed or not</check_comment>
-					<check_result>0</check_result>
+					<check_result>1</check_result>
 				</item>
 				<item id="73">
 					<check_object>/proc/sys/net/ipv4/conf/ens33/accept_source_route</check_object>
 					<check_command>cat /proc/sys/net/ipv4/conf/ens33/accept_source_route</check_command>
 					<check_comment>check if /proc/sys/net/ipv4/conf/ens33/accept_source_route source route have been closed or not</check_comment>
-					<check_result>0</check_result>
+					<check_result>1</check_result>
 				</item>
 				<item id="74">
 					<check_object>/proc/sys/net/ipv4/conf/lo/accept_source_route</check_object>
 					<check_command>cat /proc/sys/net/ipv4/conf/lo/accept_source_route</check_command>
 					<check_comment>check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not</check_comment>
-					<check_result>0</check_result>
+					<check_result>1</check_result>
 				</item>
 			</node>
 			<node id="SynCookie">
@@ -850,7 +850,7 @@ ttysclp0</check_result>
 					<check_object>/etc/init/control-alt-delete.conf</check_object>
 					<check_command>^\s*start\s+on\s+control-alt-delete\s*$</check_command>
 					<check_comment>check if Control-Alt-Delete have been enabled</check_comment>
-					<check_result>not found</check_result>
+					<check_result>start on control-alt-delete</check_result>
 				</item>
 			</node>
 		</section>
@@ -860,130 +860,130 @@ ttysclp0</check_result>
 					<check_object>suid</check_object>
 					<check_command>find / -type f -perm -04000 -o -perm -02000 -exec ls -lg {} \;</check_command>
 					<check_comment>检测suid文件</check_comment>
-					<check_result>drwxrwsrwt 2 root whoopsie 4096 7月  31 08:40 /var/crash
+					<check_result>drwxrwsrwt 2 root whoopsie 4096 7月  31  2018 /var/crash
 drwxrwsr-x 2 root staff 4096 4月  13  2016 /var/local
-drwxrwsrwt 2 root whoopsie 4096 7月  31 08:40 /var/metrics
-drwxrwsr-x 2 root mail 4096 7月  31 08:30 /var/mail
-drwxr-sr-x 93 man root 4096 1月  19 11:37 /var/cache/man
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/cs
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fy
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/he
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ta
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/si
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat4
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/mhr
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nn
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ca
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/km
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat3
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nl
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ast
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr.ISO8859-1
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pa
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/et
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ml
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ru
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/id
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/se
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_AU
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_CA
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_HK
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bs
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/vi
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pt_BR
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bg
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sl
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_CN
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/te
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sv
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ca@valencia
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/uk
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pl
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/gd
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sk
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/it
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/tr
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/gl
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ja
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sq
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ug
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ko
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/es
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bo
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/oc
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/be
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/th
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/my
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/pt
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr.UTF-8
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ps
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/az
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ar
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fa
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ro
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/shn
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat8
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ne
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat2
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ms
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/zh_TW
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/io
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/kk
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat5
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hi
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/uz
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/eu
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat1
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hr
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/cy
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/lv
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/de
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/en_GB
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fi
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hy
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/hu
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat6
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fr_CA
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/da
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/sr
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/fo
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ku
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/ce
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/lt
-drwxr-sr-x 2 man root 4096 7月  31 08:38 /var/cache/man/cat7
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/nb
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/bn
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/eo
-drwxr-sr-x 2 man root 4096 1月  19 11:37 /var/cache/man/el
+drwxrwsrwt 2 root whoopsie 4096 7月  31  2018 /var/metrics
+drwxrwsr-x 2 root mail 4096 7月  31  2018 /var/mail
+drwxr-sr-x 93 man root 4096 1月  10 07:40 /var/cache/man
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/cs
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fy
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/he
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ta
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/si
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat4
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/mhr
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nn
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ca
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/km
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat3
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nl
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ast
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr.ISO8859-1
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pa
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/et
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ml
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ru
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/id
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/se
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_AU
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_CA
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_HK
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bs
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/vi
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pt_BR
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bg
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sl
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_CN
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/te
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sv
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ca@valencia
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/uk
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pl
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/gd
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sk
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/it
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/tr
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/gl
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ja
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sq
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ug
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ko
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/es
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bo
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/oc
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/be
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/th
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/my
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/pt
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr.UTF-8
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ps
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/az
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ar
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fa
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ro
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/shn
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat8
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ne
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat2
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ms
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/zh_TW
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/io
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/kk
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat5
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hi
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/uz
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/eu
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat1
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hr
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/cy
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/lv
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/de
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/en_GB
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fi
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hy
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/hu
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat6
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fr_CA
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/da
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/sr
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/fo
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ku
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/ce
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/lt
+drwxr-sr-x 2 man root 4096 7月  31  2018 /var/cache/man/cat7
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/nb
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/bn
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/eo
+drwxr-sr-x 2 man root 4096 1月  10 07:40 /var/cache/man/el
 -rwxr-sr-x 1 root shadow 35632 4月   9  2018 /sbin/pam_extrausers_chkpwd
 -rwxr-sr-x 1 root shadow 35600 4月   9  2018 /sbin/unix_chkpwd
 drwxr-s--- 2 root dip 4096 12月 18 06:28 /etc/chatscripts
-drwxr-s--- 2 root dip 4096 7月  31 08:41 /etc/ppp/peers
+drwxr-s--- 2 root dip 4096 7月  31  2018 /etc/ppp/peers
 drwxr-sr-x 3 root systemd-journal 60 1月   4 15:35 /run/log/journal
-drwxr-s---+ 2 root systemd-journal 200 1月   9 18:54 /run/log/journal/3ed0b126c3c74968a4f6e81bb0d194c8
+drwxr-s---+ 2 root systemd-journal 220 3月  14 13:38 /run/log/journal/3ed0b126c3c74968a4f6e81bb0d194c8
 -rwxr-sr-x 1 root utmp 10232 3月  11  2016 /usr/lib/x86_64-linux-gnu/utempter/utempter
--rwxr-sr-x 1 root mail 14336 7月  26 03:31 /usr/lib/evolution/camel-lock-helper-1.2
+-rwxr-sr-x 1 root mail 14336 7月  26  2018 /usr/lib/evolution/camel-lock-helper-1.2
 drwxrwsr-t 2 root lpadmin 4096 6月  23  2018 /usr/share/ppd/custom
 drwxrwsr-x 4 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7
 drwxrwsr-x 2 root staff 4096 12月 18 06:27 /usr/local/lib/python2.7/site-packages
-drwxrwsr-x 2 root staff 4096 7月  31 08:34 /usr/local/lib/python2.7/dist-packages
-drwxrwsr-x 3 root staff 4096 7月  31 08:31 /usr/local/lib/python3.5
-drwxrwsr-x 2 root staff 4096 7月  31 08:31 /usr/local/lib/python3.5/dist-packages
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/fonts
-drwxrwsr-x 7 root staff 4096 7月  31 08:39 /usr/local/share/sgml
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/misc
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/stylesheet
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/entities
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/dtd
-drwxrwsr-x 2 root staff 4096 7月  31 08:39 /usr/local/share/sgml/declaration
-drwxrwsr-x 6 root staff 4096 7月  31 08:40 /usr/local/share/xml
-drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/misc
-drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/schema
-drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/entities
-drwxrwsr-x 2 root staff 4096 7月  31 08:40 /usr/local/share/xml/declaration
-drwxrwsr-x 3 root staff 4096 7月  31 08:41 /usr/local/share/emacs
-drwxrwsr-x 2 root staff 4096 7月  31 08:41 /usr/local/share/emacs/site-lisp
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/lib/python2.7/dist-packages
+drwxrwsr-x 3 root staff 4096 7月  31  2018 /usr/local/lib/python3.5
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/lib/python3.5/dist-packages
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/fonts
+drwxrwsr-x 7 root staff 4096 7月  31  2018 /usr/local/share/sgml
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/misc
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/stylesheet
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/entities
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/dtd
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/sgml/declaration
+drwxrwsr-x 6 root staff 4096 7月  31  2018 /usr/local/share/xml
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/misc
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/schema
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/entities
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/xml/declaration
+drwxrwsr-x 3 root staff 4096 7月  31  2018 /usr/local/share/emacs
+drwxrwsr-x 2 root staff 4096 7月  31  2018 /usr/local/share/emacs/site-lisp
 -rwxr-sr-x 1 root mlocate 39520 11月 18  2014 /usr/bin/mlocate
 -rwxr-sr-x 1 root tty 27368 5月  16  2018 /usr/bin/wall
 -rwxr-sr-x 1 root crontab 36080 4月   6  2016 /usr/bin/crontab

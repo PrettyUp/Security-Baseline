@@ -65,10 +65,45 @@ fixFilterNetworkService(){
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
                 
+usage(){
+  echo "
+Usage:
+  -h, --help        display this help and exit
+
+  example(need root right): bash os_baseline_fix.sh
+"
+}
+
+main_pre(){
+    # set -- $(getopt i:p:h "$@")
+    set -- $(getopt -o h --long help -- "$@")
+    ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
+    id=0
+
+    while true
+    do
+      case "$1" in
+      -h|--help)
+          usage
+          exit
+          ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "$1 is not option"
+        ;;
+      esac
+      shift
+    done
+    xml_file_name="/tmp/${ipaddr}_os_fix.log"
+}
 main(){
+    main_pre $@
     createReportXml
 		fixFilterNetworkService
 	closeReportXml
 }
 
-main
+main $@

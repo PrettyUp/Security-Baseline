@@ -6,9 +6,46 @@ from common.baseline_fix import GenFixScript
 
 
 class GenOSFixScript(GenFixScript):
-    def __init__(self,ip_addr):
+    def __init__(self,argv,ip_addr):
         baseline_type = "OS"
-        super().__init__(ip_addr,baseline_type)
+        super().__init__(argv,ip_addr,baseline_type)
+
+    def gen_shell_script_usage(self):
+        self.shell_script_obj.writelines("""
+usage(){
+  echo "
+Usage:
+  -h, --help        display this help and exit
+
+  example(need root right): bash os_baseline_fix.sh
+"
+}
+
+main_pre(){
+    # set -- $(getopt i:p:h "$@")
+    set -- $(getopt -o h --long help -- "$@")
+    ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
+    id=0
+
+    while true
+    do
+      case "$1" in
+      -h|--help)
+          usage
+          exit
+          ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "$1 is not option"
+        ;;
+      esac
+      shift
+    done
+    xml_file_name="/tmp/${ipaddr}_os_fix.log"
+}""")
 
     def gen_shell_script_uninstall_unnecessary_develop_tool(self,fix_object,fix_comment,check_result):
         check_result_list = check_result[0].split("、")
@@ -21,7 +58,7 @@ fixUnnecessaryDevelopTool(){
     fix_comment=\"""" + fix_comment + """\"
     fix_command=\"""" + fix_command + """\"
     fix_result=`eval $fix_command`
-    appendToXml "$fix_object" "$fix_commgen_shell_script_disable_console_appsand" "$fix_comment" "$fix_result"
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
                 """)
 
@@ -222,7 +259,7 @@ fixCtrlAltDelete(){
 }
                 """)
 
-    def gen_shell_script(self):
+    def gen_shell_script_main_part(self):
         need_fix_item = self.html_obj.html.xpath("//div[@class = 'card-header bg-danger text-white']/..")
         # need_fix_item = self.html_obj.html.xpath("//div[contains(@class, 'card-header')]/..")
         # all_need_fix_items = all_item_div.xpath("//div[@class='card-header bg-danger text-white']/..")
@@ -304,14 +341,22 @@ fixCtrlAltDelete(){
                 self.fix_item_list["gen_shell_script_disable_ctrl_alt_delete"] = "fixCtrlAltDelete"
         pass
 
+    def gen_shell_script(self):
+        self.gen_shell_script_head_part()
+        self.gen_shell_script_main_part()
+        self.gen_shell_script_usage()
+        self.gen_shell_script_tail_part()
 
 
 if __name__ == "__main__":
+    argv = sys.argv[1:]
     ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
     full_reg = f"{ip_reg}_os_report\.html"
     pwd_file_list = os.listdir("../4_report")
+    # 当前是针对4_report目录下所有html进行生成
+    # 如果要针对单个IP，直接指定IP取代这个for循环
     for file in pwd_file_list:
         if re.search(full_reg, file):
             ip_addr = re.search(ip_reg, file).group()
-            obj = GenOSFixScript(ip_addr)
+            obj = GenOSFixScript(argv,ip_addr)
             obj.gen_shell_script()
