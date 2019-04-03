@@ -84,8 +84,17 @@ getHostInfo(){
 # 为redis设置密码
 checkRedisPassword(){
     grep_flag="^requirepass\s*\w{1,}"
-    check_command="searchValueByReg $CONF_PATH $grep_flag"
+    check_command="searchValueByReg $CONF_PATH \"$grep_flag\""
     check_comment="为redis设置密码"
+    check_result=`eval $check_command`
+    appendToXml "$grep_flag" "$check_command" "$check_comment" "$check_result"
+}
+
+# 禁用高危命令FLUSHALL、FLUSHDB、KEYS
+checkRedisDangerCommand(){
+    grep_flag="^rename-command\s*\w{1,}"
+    check_command="searchValueByReg $CONF_PATH \"$grep_flag\""
+    check_comment="禁用高危命令FLUSHALL、FLUSHDB、KEYS"
     check_result=`eval $check_command`
     appendToXml "$grep_flag" "$check_command" "$check_comment" "$check_result"
 }
@@ -173,6 +182,9 @@ main(){
         createChecklist
             createSection "checkRedisPassword"
                 checkRedisPassword
+            closeSection
+            createSection "checkRedisDangerCommand"
+                checkRedisDangerCommand
             closeSection
             createSection "checkRedisAddress"
                 checkRedisAddress

@@ -62,7 +62,7 @@ configure arguments: --with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wform
 <tr><th>检测项</th><td>/usr/local/nginx/conf/nginx.conf</td></tr>
 <tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf|grep -E ^\s*server_tokens\s*off;</td></tr>
 <tr><th>检测说明</th><td>查看nginx是否隐藏版本号</td></tr>
-<tr><th>检测结果</th><td>	server_tokens off;</td></tr>
+<tr><th>检测结果</th><td>server_tokens off;</td></tr>
 </table>
 </div>
 </div>
@@ -101,7 +101,7 @@ configure arguments: --with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wform
 <tr><th>检测命令</th><td>cat /usr/local/nginx/conf/nginx.conf|grep -A 3 -E ^\s*log_format\s*main ； 
  cat /usr/local/nginx/conf/nginx.conf | grep -E ^\s*access_log\s*logs/access.log\s*main;</td></tr>
 <tr><th>检测说明</th><td>检查访问日志是否开启</td></tr>
-<tr><th>检测结果</th><td>        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+<tr><th>检测结果</th><td>log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                   '$status $body_bytes_sent "$http_referer" '
                   '"$http_user_agent""$http_x_forwarded_for"'; ;
 access_log not found</td></tr>

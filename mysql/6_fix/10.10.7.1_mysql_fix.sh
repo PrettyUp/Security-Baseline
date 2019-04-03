@@ -1,6 +1,6 @@
 #!/bin/bash
-xml_file_name='/tmp/192.168.0.2_os_fix.log'
-CATALINA_HOME='/opt/apache-tomcat-8.5.35'
+xml_file_name='/tmp/10.10.7.1_mysql_fix.log'
+CATALINA_HOME='/etc/mysql/mysql.conf.d'
 id=0
 
 createReportXml(){
@@ -67,56 +67,71 @@ searchValueByReg(){
     fi
 }
             
-fixUnnecessaryDevelopTool(){
-    fix_object="gcc、gdb"
-    fix_comment="检测编译、调试工具是否存在"
-    fix_command="apt-get remove gcc -y;apt-get remove gdb -y;"
+fixMysqlNullTestAccount(){
+    fix_object="select user,host,authentication_string from mysql.user where user = '' or user='test';"
+    fix_comment="检测是否存在空账号或test账号"
+    fix_command="mysql_command=\"delete from mysql.user where user = '' or user='test';FLUSH PRIVILEGES;\";mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"\${mysql_command}\""
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
-                
-fixUnnecessarySoftware(){
-    fix_object="pump、apmd、lsapnptools、redhat-logos、mt-st、kernel-pcmcia-cs、Setserial、redhat-relese、eject、linuxconf、kudzu、gd、bc、getty_ps、raidtools、pciutils、mailcap、setconsole、gnupg、nc"
-    fix_comment=""
-    fix_command="apt-get remove p -y;"
+        
+fixMysqlNoPassword(){
+    fix_object="select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"
+    fix_comment="检测是否存在密码为空的账号"
+    fix_command="mysql_command=\"update mysql.user set authentication_string=PASSWORD('t*tsrch0st') where length(authentication_string) = 0 or authentication_string is null;FLUSH PRIVILEGES;\";mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"\${mysql_command}\""
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
-                
-fixFilterNetworkService(){
-    fix_object="syslog"
-    fix_comment="检测危险服务是否启动"
-    fix_command="systemctl stop syslog ;"
-    fix_result=`eval $fix_command`
-    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
-}
-                
-fixEtcServices(){
-    fix_object="tftp、sendmail、finger、uccp、ftp"
-    fix_comment="检测ftp服务进程是否启动"
-    fix_command="kill -9 `ps -ef | grep t | grep -v grep|cut -f 1`;"
-    fix_result=`eval $fix_command`
-    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
-}
-                
+        
 usage(){
   echo "
 Usage:
+  -i, --ip          mysql service ip, default 127.0.0.1
+  -P, --port        mysql service port, default 3306
+  -u, --user	    mysql service user, default root
+  -p, --password    mysql service user's password, default toor
+  -d, --basedir     mysql security config path to save, default /etc/mysql/mysql.conf.d
   -h, --help        display this help and exit
 
-  example(need root right): bash os_baseline_fix.sh
+  example1: bash mysql_baseline_fix.sh -i127.0.0.1 -P3306 -uroot -ptoor
+  example2: bash mysql_baseline_fix.sh --ip=127.0.0.1 --port=3306 --user=root --password=toor
 "
 }
 
 main_pre(){
     # set -- $(getopt i:p:h "$@")
-    set -- $(getopt -o h --long help -- "$@")
+    set -- $(getopt -o i:P:u:p:d:h --long ip:,port:,user:,password:,basedir:,help -- "$@")
     ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
     id=0
+    CATALINA_HOME='/etc/mysql/mysql.conf.d'
+    mysql_host="127.0.0.1"
+    mysql_port="3306"
+    mysql_user="root"
+    mysql_password="toor"
 
     while true
     do
       case "$1" in
+      -i|--ip)
+          mysql_ip="$2"
+          shift
+          ;;
+      -P|--port)
+          mysql_port="$2"
+          shift
+          ;;
+      -u|--user)
+          mysql_user="$2"
+          shift
+          ;;
+      -p|--password)
+          mysql_password="$2"
+          shift
+          ;;
+      -d|--basedir)
+          CATALINA_HOME="$2"
+          shift
+          ;;
       -h|--help)
           usage
           exit
@@ -131,15 +146,12 @@ main_pre(){
       esac
       shift
     done
-    xml_file_name="/tmp/${ipaddr}_os_fix.log"
+    xml_file_name="/tmp/${ipaddr}_mysql_fix.log"
 }
 main(){
     main_pre $@
     createReportXml
-		fixUnnecessaryDevelopTool
-		fixUnnecessarySoftware
-		fixFilterNetworkService
-		fixCloseDangerProcess
+		fixMysqlNoPassword
 	closeReportXml
 }
 

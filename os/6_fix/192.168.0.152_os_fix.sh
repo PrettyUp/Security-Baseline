@@ -32,7 +32,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\t<item id=""$id"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\t\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\t\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\t\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\t\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -45,16 +45,26 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             
 fixUnnecessaryDevelopTool(){
@@ -62,7 +72,7 @@ fixUnnecessaryDevelopTool(){
     fix_comment="检测编译、调试工具是否存在"
     fix_command="apt-get remove gcc -y;"
     fix_result=`eval $fix_command`
-    appendToXml "$fix_object" "$fix_commgen_shell_script_disable_console_appsand" "$fix_comment" "$fix_result"
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
                 
 fixPasswordLengthLimit(){
@@ -100,7 +110,7 @@ fixFilterNetworkService(){
 fixEtcServices(){
     fix_object="/etc/services"
     fix_comment="check /etc/services owner and permit"
-    fix_command="chown root:root /etc/services;chmod 600 /etc/services;"
+    fix_command="chown root:root -;chmod 600 -;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
@@ -122,7 +132,9 @@ fixNoSpoof(){
 }
                 
 fixDisableSourceRoute(){
-    fix_object="/proc/sys/net/ipv4/conf/default/accept_source_route"
+    fix_object="/proc/sys/net/ipv4/conf/default/accept_source_route
+/proc/sys/net/ipv4/conf/eth0/accept_source_route
+/proc/sys/net/ipv4/conf/lo/accept_source_route"
     fix_comment="check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not"
     fix_command='for f in /proc/sys/net/ipv4/conf/*/accept_source_route; do echo 0 > $f; done'
     fix_result=`eval $fix_command`

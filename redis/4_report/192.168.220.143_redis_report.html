@@ -31,16 +31,16 @@
 <br /><div class="container">
 <div id="accordion1">
 <div class="card">
-<div class="card-header bg-danger text-white">
+<div class="card-header bg-success text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse1">为redis设置密码</a>
 </div>
 <div id="collapse1" class="collapse" data-parent="#accordion1">
 <div class="card-body" style="padding:0.25rem">
 <table id="RedisPassword_list" class="table">
 <tr><th>检测项</th><td>^requirepass\s*\w{1,}</td></tr>
-<tr><th>检测命令</th><td>searchValueByReg $CONF_PATH $grep_flag</td></tr>
+<tr><th>检测命令</th><td>searchValueByReg /opt/redis-5.0/conf/redis.conf "^requirepass\s*\w{1,}"</td></tr>
 <tr><th>检测说明</th><td>为redis设置密码</td></tr>
-<tr><th>检测结果</th><td>not found</td></tr>
+<tr><th>检测结果</th><td>requirepass t*tsrch0st</td></tr>
 </table>
 </div>
 </div>
@@ -50,10 +50,29 @@
 <div class="container">
 <div id="accordion2">
 <div class="card">
-<div class="card-header bg-success text-white">
-<a class="card-link text-white" data-toggle="collapse" href="#collapse2">建议只监听本地地址</a>
+<div class="card-header bg-danger text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse2">禁用高危命令FLUSHALL、FLUSHDB、KEYS</a>
 </div>
 <div id="collapse2" class="collapse" data-parent="#accordion2">
+<div class="card-body" style="padding:0.25rem">
+<table id="RedisPassword_list" class="table">
+<tr><th>检测项</th><td>^rename-command\s*\w{1,}</td></tr>
+<tr><th>检测命令</th><td>searchValueByReg /opt/redis-5.0/conf/redis.conf "^rename-command\s*\w{1,}"</td></tr>
+<tr><th>检测说明</th><td>禁用高危命令FLUSHALL、FLUSHDB、KEYS</td></tr>
+<tr><th>检测结果</th><td>not found</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div id="accordion3">
+<div class="card">
+<div class="card-header bg-success text-white">
+<a class="card-link text-white" data-toggle="collapse" href="#collapse3">建议只监听本地地址</a>
+</div>
+<div id="collapse3" class="collapse" data-parent="#accordion3">
 <div class="card-body" style="padding:0.25rem">
 <table id="RedisAddress_list" class="table">
 <tr><th>检测项</th><td>^bind\s*</td></tr>
@@ -67,18 +86,18 @@
 </div>
 </div>
 <div class="container">
-<div id="accordion3">
+<div id="accordion4">
 <div class="card">
 <div class="card-header bg-success text-white">
-<a class="card-link text-white" data-toggle="collapse" href="#collapse3">禁止以root用户运行</a>
+<a class="card-link text-white" data-toggle="collapse" href="#collapse4">禁止以root用户运行</a>
 </div>
-<div id="collapse3" class="collapse" data-parent="#accordion3">
+<div id="collapse4" class="collapse" data-parent="#accordion4">
 <div class="card-body" style="padding:0.25rem">
 <table id="RedisRunner_list" class="table">
 <tr><th>检测项</th><td>redis-server</td></tr>
 <tr><th>检测命令</th><td>ps -ef |grep redis-server|grep -v grep</td></tr>
 <tr><th>检测说明</th><td>禁止以root用户运行</td></tr>
-<tr><th>检测结果</th><td>ls        58423  58422  0 11:07 pts/3    00:00:16 ../bin/redis-server 127.0.0.1:6379</td></tr>
+<tr><th>检测结果</th><td>ls        58423  58422  0 11:07 pts/3    00:00:25 ../bin/redis-server 127.0.0.1:6379</td></tr>
 </table>
 </div>
 </div>
@@ -86,12 +105,12 @@
 </div>
 </div>
 <div class="container">
-<div id="accordion4">
+<div id="accordion5">
 <div class="card">
 <div class="card-header bg-warning text-white">
-<a class="card-link text-white" data-toggle="collapse" href="#collapse4">确认redis是最新版本</a>
+<a class="card-link text-white" data-toggle="collapse" href="#collapse5">确认redis是最新版本</a>
 </div>
-<div id="collapse4" class="collapse" data-parent="#accordion4">
+<div id="collapse5" class="collapse" data-parent="#accordion5">
 <div class="card-body" style="padding:0.25rem">
 <table id="RedisVersion_list" class="table">
 <tr><th>检测项</th><td>$SERVER_PATH</td></tr>
@@ -172,7 +191,7 @@
                 type: 'pie',
                 name: '检测项占比',
                 data: [
-                    {name:'合规',   y:2,color:'#28a745'},
+                    {name:'合规',   y:3,color:'#28a745'},
                     {name:'待审查',y: 1,color:'#ffc107'},
                     {name:'不合规',   y:1,color:'#dc3545'}
                 ]

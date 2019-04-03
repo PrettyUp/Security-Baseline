@@ -32,7 +32,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\t<item id=""$id"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\t\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\t\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\t\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\t\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -45,22 +45,32 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             
 fixNginxUserAgent(){
     fix_object="/usr/local/nginx/conf/nginx.conf"
     fix_comment="查看user-agent中否配置正确"
-    fix_command="cd $CATALINA_HOME/conf;sed -i -r '/^\s*location[^{]*\{/a\            if (\$http_user_agent ~* \"java\|3_parse\|perl\|ruby\|curl\|bash\|echo\|uname\|base64\|decode\|md5sum\|select\|concat\|httprequest\|httpclient\|nmap\|scan\" ) \{\n                    return 403;\n            \}' nginx.conf; "
+    fix_command="cd $CATALINA_HOME/conf;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
@@ -68,7 +78,7 @@ fixNginxUserAgent(){
 fixErrorLog(){
     fix_object="/usr/local/nginx/conf/nginx.conf"
     fix_comment="检查访问日志是否开启"
-    fix_command="cd $CATALINA_HOME/conf; sed -i '/^\s*http\s*{/a\    access_log  logs/access.log  main;' nginx.conf; "
+    fix_command="cd $CATALINA_HOME/conf;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }

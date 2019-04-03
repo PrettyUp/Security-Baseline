@@ -94,7 +94,7 @@ checkMysqlRunner(){
 # 设置最大连接数限制
 checkMysqlMaxConnections(){
     mysql_command="show variables like 'max_connections';"
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     check_comment="设置最大连接数限制"
     check_result=`eval $check_command`
     appendToXml "$mysql_command" "$check_command" "$check_comment" "$check_result"
@@ -103,7 +103,7 @@ checkMysqlMaxConnections(){
 # 检测是否存在空账号或test账号
 checkMysqlNullTestAccount(){
     mysql_command="select user,host,authentication_string from mysql.user where user = '' or user='test';"
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     check_comment="检测是否存在空账号或test账号"
     check_result=`eval $check_command`
     appendToXml "$mysql_command" "$check_command" "$check_comment" "$check_result"
@@ -112,7 +112,7 @@ checkMysqlNullTestAccount(){
 # 检测是否存在密码为空的账号
 checkMysqlNoPassword(){
     mysql_command="select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     check_comment="检测是否存在密码为空的账号"
     check_result=`eval $check_command`
     appendToXml "$mysql_command" "$check_command" "$check_comment" "$check_result"
@@ -121,7 +121,7 @@ checkMysqlNoPassword(){
 # 分角色创建账号同时删除不必要的账号
 checkMysqlAccount(){
     mysql_command="select user,host,authentication_string from mysql.user;"
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     check_comment="分角色创建账号同时删除不必要的账号"
     check_result=`eval $check_command`
     appendToXml "$mysql_command" "$check_command" "$check_comment" "$check_result"
@@ -130,7 +130,7 @@ checkMysqlAccount(){
 # 开启日志
 checkMysqlLog(){
     mysql_command="show variables like \\\"log_%\\\";"
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     echo "$check_command"
     check_comment="开启日志"
     check_result=`eval $check_command`
@@ -140,7 +140,7 @@ checkMysqlLog(){
 # 确认mysql是最新版本
 checkMysqlVersion(){
     mysql_command='select VERSION();'
-    check_command="mysql -h${mysql_host} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
+    check_command="mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"${mysql_command}\""
     check_comment="确认mysql是最新版本"
     check_result=`eval $check_command`
     appendToXml "$mysql_command" "$check_command" "$check_comment" "$check_result"
@@ -166,7 +166,7 @@ main_pre(){
     ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
     id=0
     # CATALINA_HOME='/opt/apache-tomcat-8.5.35'
-    mysql_host="127.0.0.1"
+    mysql_ip="127.0.0.1"
     mysql_port="3306"
     mysql_user="root"
     mysql_password="toor"
@@ -175,7 +175,7 @@ main_pre(){
     do
       case "$1" in
       -i|--ip)
-          mysql_host="$2"
+          mysql_ip="$2"
           shift
           ;;
       -P|--port)

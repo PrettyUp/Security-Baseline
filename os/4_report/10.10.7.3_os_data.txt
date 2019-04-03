@@ -1,0 +1,3 @@
+non_compliant=48.7%
+compliant=48.7%
+other=2.6%

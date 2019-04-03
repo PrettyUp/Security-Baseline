@@ -32,7 +32,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\t<item id=""$id"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\t\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\t\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\t\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\t\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -45,18 +45,44 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             
+fixMysqlNullTestAccount(){
+    fix_object="select user,host,authentication_string from mysql.user where user = '' or user='test';"
+    fix_comment="检测是否存在空账号或test账号"
+    fix_command="mysql_command=\"delete from mysql.user where user = '' or user='test';FLUSH PRIVILEGES;\";mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"\${mysql_command}\""
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+        
+fixMysqlNoPassword(){
+    fix_object="select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"
+    fix_comment="检测是否存在密码为空的账号"
+    fix_command="mysql_command=\"update mysql.user set authentication_string=PASSWORD('t*tsrch0st') where length(authentication_string) = 0 or authentication_string is null;FLUSH PRIVILEGES;\";mysql -h${mysql_ip} -P${mysql_port} -u${mysql_user} -p${mysql_password} -e \"\${mysql_command}\""
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+        
 usage(){
   echo "
 Usage:
@@ -122,14 +148,10 @@ main_pre(){
     done
     xml_file_name="/tmp/${ipaddr}_mysql_fix.log"
 }
-noNeedFixInfo(){
-    echo "there is not any item need to 6_fix"
-}
-        
 main(){
     main_pre $@
     createReportXml
-		noNeedFixInfo
+		fixMysqlNoPassword
 	closeReportXml
 }
 

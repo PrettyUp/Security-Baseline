@@ -58,13 +58,13 @@
 <div class="container">
 <div id="accordion12">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse12">如果不使用，卸载下列高危软件</a>
 </div>
 <div id="collapse12" class="collapse" data-parent="#accordion12">
 <div class="card-body" style="padding:0.25rem">
 <table id="UnnecessarySoftware_list" class="table">
-<tr><th>已安装软件</th><td></td></tr>
+<tr><th>已安装软件</th><td>pump、apmd、lsapnptools、redhat-logos、mt-st、kernel-pcmcia-cs、Setserial、redhat-relese、eject、linuxconf、kudzu、gd、bc、getty_ps、raidtools、pciutils、mailcap、setconsole、gnupg、nc</td></tr>
 <tr><th>检测命令</th><td>ps -ef | grep $software|grep -v grep</td></tr>
 <tr><th>检测说明</th><td></td></tr>
 <tr><th>所有检测项</th><td>pump、apmd、lsapnptools、redhat-logos、mt-st、kernel-pcmcia-cs、Setserial、redhat-relese、eject、linuxconf、kudzu、gd、bc、getty_ps、raidtools、pciutils、mailcap、setconsole、gnupg、nc</td></tr>
@@ -263,13 +263,13 @@
 <div class="container">
 <div id="accordion34">
 <div class="card">
-<div class="card-header bg-success text-white">
+<div class="card-header bg-danger text-white">
 <a class="card-link text-white" data-toggle="collapse" href="#collapse34">关闭危险服务进程</a>
 </div>
 <div id="collapse34" class="collapse" data-parent="#accordion34">
 <div class="card-body" style="padding:0.25rem">
 <table id="ServicesPermit_list" class="table">
-<tr><th>已启动项</th><td></td></tr>
+<tr><th>已启动项</th><td>tftp、sendmail、finger、uccp、ftp</td></tr>
 <tr><th>检测命令</th><td>ps -ef |grep ftp | grep -v grep</td></tr>
 <tr><th>检测说明</th><td>检测ftp服务进程是否启动</td></tr>
 <tr><th>所有检测项</th><td>tftp、sendmail、finger、uccp、ftp</td></tr>
@@ -542,9 +542,9 @@
                 type: 'pie',
                 name: '检测项占比',
                 data: [
-                    {name:'合规',   y:62,color:'#28a745'},
+                    {name:'合规',   y:37,color:'#28a745'},
                     {name:'待审查',y: 2,color:'#ffc107'},
-                    {name:'不合规',   y:13,color:'#dc3545'}
+                    {name:'不合规',   y:38,color:'#dc3545'}
                 ]
             }]
         });

@@ -3,21 +3,38 @@ from lxml import etree
 
 class BaselineParse:
     def __init__(self,ip_addr,baseline_type="OS"):
+        self.ip_addr = ip_addr
         self.baseline_type = baseline_type
-        baseline_type_lower = baseline_type.lower()
-        self.xml_obj = etree.parse(f"../2_info/{ip_addr}_{baseline_type_lower}_info.xml")
+        self.baseline_type_lower = baseline_type.lower()
+        self.xml_obj = etree.parse(f"../2_info/{ip_addr}_{self.baseline_type_lower}_info.xml")
         # self.xml_obj = untangle.parse('os_report_xml.xml')
         # ip_addr = self.xml_obj.xpath("/root/hostinfo/ipaddr")[0].text
-        self.html_report_obj = open(f"../4_report/{ip_addr}_{baseline_type_lower}_report.html", "w+", encoding='utf-8')
+        self.html_report_obj = open(f"../4_report/{ip_addr}_{self.baseline_type_lower}_report.html", "w+", encoding='utf-8')
         self.config_right = 0
         self.config_warn = 0
         self.config_error = 0
         self.gen_html_report_before_sections()
+        file_name = f"../4_report/{self.ip_addr}_{self.baseline_type_lower}_data.txt"
+        self.file_obj = open(file_name, "w+", encoding='utf-8')
+
+    def node_xpath(self,obj,xpath_pattern):
+        try:
+            node = obj.xpath(xpath_pattern)
+        except:
+            node = None
+        return node
+
+    def text_xpath(self,obj,xpath_pattern):
+        try:
+            text = obj.xpath(xpath_pattern)[0].text.strip()
+        except:
+            text = ""
+        return text
 
 
     # 生成html头部信息
     def gen_html_report_head(self):
-        ip_addr = self.xml_obj.xpath("/root/hostinfo/ipaddr")[0].text
+        ip_addr = self.text_xpath(self.xml_obj,"/root/hostinfo/ipaddr")
         self.html_report_obj.writelines("<!Doctype html>\n")
         self.html_report_obj.writelines("<html>\n")
         self.html_report_obj.writelines("<head>\n")
@@ -48,15 +65,15 @@ class BaselineParse:
 
     # 生成主机信息节区
     def gen_html_report_hostinfo_table(self):
-        hostname = self.xml_obj.xpath("/root/hostinfo/hostname")[0].text
-        ip_addr = self.xml_obj.xpath("/root/hostinfo/ipaddr")[0].text
+        hostname = self.text_xpath(self.xml_obj,"/root/hostinfo/hostname")
+        ip_addr = self.text_xpath(self.xml_obj,"/root/hostinfo/ipaddr")
         try:
-            os_version = self.xml_obj.xpath("/root/hostinfo/os_version")[0].text.strip()
+            os_version = self.text_xpath(self.xml_obj,"/root/hostinfo/os_version")
         except:
             os_version = ""
-        kernel_version = self.xml_obj.xpath("/root/hostinfo/kernel_version")[0].text.strip()
-        tcp_services = self.xml_obj.xpath("/root/hostinfo/tcp_services")[0].text
-        udp_services = self.xml_obj.xpath("/root/hostinfo/udp_services")[0].text
+        kernel_version = self.text_xpath(self.xml_obj,"/root/hostinfo/kernel_version")
+        tcp_services = self.text_xpath(self.xml_obj,"/root/hostinfo/tcp_services")
+        udp_services = self.text_xpath(self.xml_obj,"/root/hostinfo/udp_services")
         tcp_services_lines = tcp_services.split("\n")
         udp_services_lines = udp_services.split("\n")
         listen_addr_reg = "[\.|\d]+:\d+"
@@ -177,6 +194,20 @@ class BaselineParse:
         });
                 </script>\n""")
 
+    # 按要求把合规比例数字写入ip_type_data.txt，如不需要到下方gen_html_report_after_sections将该函数调用注释即可
+    def save_scanner_result_data_to_file(self):
+        # open放这位置会报错NameError: name 'open' is not defined，放__init__不会，不懂什么原因
+        # file_name = f"../4_report/{self.ip_addr}_{self.baseline_type_lower}_data.txt"
+        # self.file_obj = open(file_name, "w+", encoding='utf-8')
+        total_count = self.config_error + self.config_right + self.config_warn
+        non_compliant_rate = round(self.config_error/total_count*100,1)
+        compliant_rate = round(self.config_right/total_count*100,1)
+        other_rate = round(self.config_warn/total_count*100,1)
+        self.file_obj.writelines(f"non_compliant={non_compliant_rate}%\n")
+        self.file_obj.writelines(f"compliant={compliant_rate}%\n")
+        self.file_obj.writelines(f"other={other_rate}%\n")
+        self.file_obj.close()
+
     # 生成展开卡片
     def create_accordion_card(self, accordion_id, accordion_title, collapse_id, show_flag=0, card_class="bg-danger text-white"):
         self.html_report_obj.writelines("""<div class="container">\n""")
@@ -233,6 +264,8 @@ class BaselineParse:
         self.gen_html_report_explain()
         self.gen_html_report_pie_fill_data()
         self.gen_html_report_tail()
+        # 按要求把合规比例数字写入ip_type_data.txt，如不需要将该函数调用注释即可
+        self.save_scanner_result_data_to_file()
 
     def replace_n_by_bar_label(self,org_content):
         modify_content = org_content.replace("\n","<br />")

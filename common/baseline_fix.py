@@ -8,8 +8,8 @@ from requests_html import HTMLSession
 
 
 class GenFixScript():
-    def __init__(self,argv,ip_addr,baseline_type="OS",base_dir="/opt/apache-tomcat-8.5.35"):
-        self.parse_argv(argv)
+    def __init__(self,ip_addr,baseline_type="OS",base_dir="/opt/apache-tomcat-8.5.35"):
+        # self.parse_argv(argv)
         session = HTMLSession()
         session.mount('file://', FileAdapter())
         # Windows系统路径目录分隔符为反斜杠，但get需要正斜杠所以先进行一下替换
@@ -31,21 +31,34 @@ class GenFixScript():
         self.fix_item_list={}
         # self.gen_shell_script_head_part()
 
-    def usage(self):
-        print(f"""
-Usage:
-  -h, --help        display this help and exit
+#     def usage(self):
+#         print(f"""
+# Usage:
+#   -h, --help        display this help and exit
+#
+#   example: python3 {self.baseline_type}_baseline_fix.py
+#         """)
+#
+#     def parse_argv(self,argv):
+#         opts, args = getopt.getopt(argv, "h", ["help", ])
+#         for opt, arg in opts:
+#             # -h与--help等价
+#             if opt in ("-h", "--help"):
+#                 self.usage()
+#                 sys.exit()
+    def node_xpath(self,obj,xpath_pattern):
+        try:
+            node = obj.xpath(xpath_pattern)
+        except:
+            node = None
+        return node
 
-  example: python3 {self.baseline_type}_baseline_fix.py
-        """)
-
-    def parse_argv(self,argv):
-        opts, args = getopt.getopt(argv, "h", ["help", ])
-        for opt, arg in opts:
-            # -h与--help等价
-            if opt in ("-h", "--help"):
-                self.usage()
-                sys.exit()
+    def text_xpath(self,obj,xpath_pattern):
+        try:
+            text = obj.xpath(xpath_pattern)[0].text.strip()
+        except:
+            text = ""
+        return text
 
     def gen_shell_script_head_part(self):
         self.shell_script_obj.writelines("""#!/bin/bash

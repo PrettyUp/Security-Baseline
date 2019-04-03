@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>ubuntu</hostname>
+		<ipaddr>10.10.7.4</ipaddr>
+		<os_version>	Ubuntu 16.04.4 LTS</os_version>
+		<kernel_version>4.4.0-116-generic</kernel_version>
+		<tcp_services>tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1320/sshd       
+tcp        0      0 10.10.7.4:16379         0.0.0.0:*               LISTEN      9028/redis-server 1
+tcp        0      0 10.10.7.4:16380         0.0.0.0:*               LISTEN      9027/redis-server 1
+tcp        0      0 0.0.0.0:10050           0.0.0.0:*               LISTEN      11462/zabbix_agentd
+tcp        0      0 10.10.7.4:3306          0.0.0.0:*               LISTEN      15008/mysqld    
+tcp        0      0 10.10.7.4:6379          0.0.0.0:*               LISTEN      9028/redis-server 1
+tcp        0      0 10.10.7.4:6380          0.0.0.0:*               LISTEN      9027/redis-server 1
+tcp6       0      0 :::22                   :::*                    LISTEN      1320/sshd       
+tcp6       0      0 10.10.7.4:13888         :::*                    LISTEN      9262/java       
+tcp6       0      0 :::10050                :::*                    LISTEN      11462/zabbix_agentd
+tcp6       0      0 10.10.7.4:9092          :::*                    LISTEN      9708/java       
+tcp6       0      0 :::2181                 :::*                    LISTEN      9262/java       
+tcp6       0      0 :::44173                :::*                    LISTEN      9262/java       
+tcp6       0      0 :::34481                :::*                    LISTEN      9708/java       </tcp_services>
+		<udp_services></udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkRedisPassword">
+				<item id="0">
+					<check_object>^requirepass\s*\w{1,}</check_object>
+					<check_command>searchValueByReg '/root/redis/redis-5.0.3' "^requirepass\s*\w{1,}"</check_command>
+					<check_comment>为redis设置密码</check_comment>
+					<check_result>not found</check_result>
+				</item>
+		</section>
+		<section id="checkRedisDangerCommand">
+				<item id="1">
+					<check_object>^rename-command\s*\w{1,}</check_object>
+					<check_command>searchValueByReg '/root/redis/redis-5.0.3' "^rename-command\s*\w{1,}"</check_command>
+					<check_comment>禁用高危命令FLUSHALL、FLUSHDB、KEYS</check_comment>
+					<check_result>not found</check_result>
+				</item>
+		</section>
+		<section id="checkRedisAddress">
+				<item id="2">
+					<check_object>^bind\s*</check_object>
+					<check_command>searchValueByReg '/root/redis/redis-5.0.3' ^bind\s*</check_command>
+					<check_comment>建议只监听本地地址</check_comment>
+					<check_result>not found</check_result>
+				</item>
+		</section>
+		<section id="checkRedisRunner">
+				<item id="3">
+					<check_object>redis-server</check_object>
+					<check_command>ps -ef |grep redis-server|grep -v grep</check_command>
+					<check_comment>禁止以root用户运行</check_comment>
+					<check_result>root      9027     1  0 13:01 ?        00:00:11 /root/redis//redis-5.0.3/src/redis-server 10.10.7.4:6380 [cluster]
+root      9028     1  0 13:01 ?        00:00:13 /root/redis//redis-5.0.3/src/redis-server 10.10.7.4:6379 [cluster]</check_result>
+				</item>
+		</section>
+		<section id="checkRedisVersion">
+				<item id="4">
+					<check_object>$SERVER_PATH</check_object>
+					<check_command>'/root/redis/redis-5.0.3/src' -v</check_command>
+					<check_comment>确认redis是最新版本</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+	</checklist>
+</root>

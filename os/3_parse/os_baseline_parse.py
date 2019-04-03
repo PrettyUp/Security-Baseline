@@ -3,6 +3,7 @@ import re
 import sys
 sys.path.append('../../')
 from common.baseline_parse import BaselineParse
+from common.baseline_param_parse import BaselineParamParse
 
 
 class GenOSHtmlReport(BaselineParse):
@@ -30,12 +31,13 @@ class GenOSHtmlReport(BaselineParse):
 
         tool_check_list = []
         tool_exist_list = []
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='UnnecessarySoftware']/node[@id='UnnecessaryDevTool']/item")
+        # current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='UnnecessarySoftware']/node[@id='UnnecessaryDevTool']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='UnnecessarySoftware']/node[@id='UnnecessaryDevTool']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             tool_check_list.append(check_object)
             if check_result is None:
@@ -69,12 +71,12 @@ class GenOSHtmlReport(BaselineParse):
 
         software_list = []
         installed_list = []
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='UnnecessarySoftware']/node[@id='UnnecessarySoftware']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='UnnecessarySoftware']/node[@id='UnnecessarySoftware']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             software_list.append(check_object)
             if check_result is None:
@@ -119,12 +121,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "口令长度限制"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='PasswdLengthLimit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='PasswdLengthLimit']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             if check_object == "/etc/login.defs":
                 if "not found" in check_result:
@@ -148,12 +150,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "口令复杂度限制"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='PasswdComplexLimit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='PasswdComplexLimit']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             if check_object == "/etc/pam.d/common-password":
                 if "not found" in check_result:
@@ -177,12 +179,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "口令日期限制"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='PasswdDateLimit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='PasswdDateLimit']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             if check_object == "/etc/login.defs":
                 if "not found" in check_result:
@@ -206,12 +208,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "只允许wheel组su"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='SuLimit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='SuLimit']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             if check_object == "/etc/pam.d/su":
                 if check_result is None:
@@ -235,24 +237,24 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "/etc/passwd和/etc/shadow用户是否一致"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        item = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='PasswdContent']/item")[0]
+        item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='PasswdContent']/item")[0]
 
         user_passwd = []
-        check_object_passwd = item.xpath("check_object")[0].text.strip()
-        check_command_passwd = item.xpath("check_command")[0].text.strip()
-        check_comment_passwd = item.xpath("check_comment")[0].text.strip()
-        check_result_passwd = item.xpath("check_result")[0].text
+        check_object_passwd = self.text_xpath(item,"check_object")
+        check_command_passwd = self.text_xpath(item,"check_command")
+        check_comment_passwd = self.text_xpath(item,"check_comment")
+        check_result_passwd = self.text_xpath(item,"check_result")
         check_result_passwd_list = check_result_passwd.split("\n")
         for line in check_result_passwd_list:
             user = line.split(":")[0]
             user_passwd.append(user)
 
         user_shadow = []
-        item = self.xml_obj.xpath("/root/checklist/section[@id='AccountLimit']/node[@id='ShadowContent']/item")[0]
-        check_object_shadow = item.xpath("check_object")[0].text.strip()
-        check_command_shadow = item.xpath("check_command")[0].text.strip()
-        check_comment_shadow = item.xpath("check_comment")[0].text.strip()
-        check_result_shadow = item.xpath("check_result")[0].text
+        item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='AccountLimit']/node[@id='ShadowContent']/item")[0]
+        check_object_shadow = self.text_xpath(item,"check_object")
+        check_command_shadow = self.text_xpath(item,"check_command")
+        check_comment_shadow = self.text_xpath(item,"check_comment")
+        check_result_shadow = self.text_xpath(item,"check_result")
         check_result_shadow_list = check_result_shadow.split("\n")
         for line in check_result_shadow_list:
             user = line.split(":")[0]
@@ -300,14 +302,14 @@ class GenOSHtmlReport(BaselineParse):
         accordion_title = "服务过滤Filtering"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
 
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='ServiceSecurity']/node[@id='DangerService']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='ServiceSecurity']/node[@id='DangerService']/item")
         service_list = []
         active_service_list = []
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             service_list.append(check_object)
             if check_result is None or "active (running)" not in check_result:
@@ -334,13 +336,13 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "/etc/inetd.conf"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='ServiceSecurity']/node[@id='InetdPermit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='ServiceSecurity']/node[@id='InetdPermit']/item")
 
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
             if check_object == "/etc/xinetd.conf":
                 permit_reg = "^-r*w*-{6,}"
                 reg_result = re.match(permit_reg,check_result)
@@ -366,13 +368,13 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "/etc/services"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='ServiceSecurity']/node[@id='ServicesPermit']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='ServiceSecurity']/node[@id='ServicesPermit']/item")
 
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
             if check_object == "/etc/services":
                 permit_reg = "^[r|w|-]{3}-{6,}"
                 reg_result = re.match(permit_reg, check_result)
@@ -398,17 +400,18 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "关闭危险服务进程"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='ServiceSecurity']/node[@id='ServicesProcess']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='ServiceSecurity']/node[@id='ServicesProcess']/item")
         all_process_list = []
         active_process_list = []
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text
+            check_object = self.text_xpath(item,"check_object")
+            check_command = self.text_xpath(item,"check_command")
+            check_comment = self.text_xpath(item,"check_comment")
+            check_result = self.text_xpath(item,"check_result")
 
             all_process_list.append(check_object)
-            if check_result is not None:
+            # ubuntu上syslog没法关闭，这里例外放行
+            if check_result is not None and check_result != "syslog":
                 active_process_list.append(check_object)
                 self.config_error += 1
             else:
@@ -447,12 +450,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "限制控制台的使用"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='ConsoleAppsExists']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='ConsoleAppsExists']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
             card_class = "bg-danger text-white"
             if check_object == "/etc/security/console.apps":
                 if check_result == "" or "No such file" in check_result:
@@ -475,12 +478,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "系统关闭Ping"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='PingClose']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='PingClose']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
             card_class = "bg-danger text-white"
             if check_object == "/proc/sys/net/ipv4/icmp_echo_ignore_all":
                 if check_result == "1":
@@ -502,12 +505,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "禁止其他tty"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='TtyStatus']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='TtyStatus']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
 
             if check_object == "/etc/securetty":
                 if "not found" in check_result:
@@ -532,12 +535,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "检测IP欺骗"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='HostConf']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='HostConf']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
             card_class = "bg-danger text-white"
             if check_object == "/etc/host.conf":
                 if "not found" not in check_result:
@@ -559,14 +562,14 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "禁用源路由"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='DisableSourceRoute']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='DisableSourceRoute']/item")
         all_list = []
         need_fix_list = []
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
 
             all_list.append(check_object)
 
@@ -594,12 +597,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "启用Syn Cookie"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='SynCookie']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='SynCookie']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
 
             if check_object == "/proc/sys/net/ipv4/tcp_syncookies":
                 if check_result == "1":
@@ -622,12 +625,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "Control-Alt-Delete 键盘关机命令"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='SystemSettingSecurity']/node[@id='CtrlAltDelDisable']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='SystemSettingSecurity']/node[@id='CtrlAltDelDisable']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
             card_class = "bg-danger text-white"
             if check_object == "/etc/init/control-alt-delete.conf":
                 if "not found" in check_result:
@@ -662,12 +665,12 @@ class GenOSHtmlReport(BaselineParse):
         accordion_id = f"accordion{accordion_no}{collapse_no}"
         accordion_title = "文件权限"
         collapse_id = f"collapse{accordion_no}{collapse_no}"
-        current_node_items = self.xml_obj.xpath("/root/checklist/section[@id='FileSystemSecurity']/node[@id='FindSuidFile']/item")
+        current_node_items = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='FileSystemSecurity']/node[@id='FindSuidFile']/item")
         for item in current_node_items:
-            check_object = item.xpath("check_object")[0].text.strip()
-            check_command = item.xpath("check_command")[0].text.strip()
-            check_comment = item.xpath("check_comment")[0].text.strip()
-            check_result = item.xpath("check_result")[0].text.strip()
+            check_object = self.text_xpath(item, "check_object")
+            check_command = self.text_xpath(item, "check_command")
+            check_comment = self.text_xpath(item, "check_comment")
+            check_result = self.text_xpath(item, "check_result")
             # accordion_title = check_comment
             if check_result != "":
                 card_class = "bg-warning text-white"
@@ -705,13 +708,31 @@ class GenOSHtmlReport(BaselineParse):
 
 
 if __name__ == "__main__":
-    ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
-    full_reg = f"{ip_reg}_os_info\.xml"
-    pwd_file_list = os.listdir("../2_info")
-    # 当前是针对2_info目录下所有xml进行解析
-    # 如果要针对单个IP，直接指定IP取代这个for循环
-    for file in pwd_file_list:
-        if re.search(full_reg, file):
-            ip_addr = re.search(ip_reg, file).group()
-            gen_report_obj = GenOSHtmlReport(ip_addr)
-            gen_report_obj.gen_html_report()
+    bpp_obj = BaselineParamParse()
+    model,ip = bpp_obj.param_parse(sys.argv[1:])
+    if model == "ip":
+        # 如果ip模式中未给出ip列出则报错退出
+        if ip is None:
+            bpp_obj.usage()
+            sys.exit(1)
+        else:
+            ip_list = ip.split(",")
+            for ip_addr in ip_list:
+                # 如果指定的ip对应的文件并不存在则跳过
+                if not os.path.exists(f"../2_info/{ip_addr}_os_info.xml"):
+                    print(f'sorry, file "../2_info/{ip_addr}_os_info.xml" is not exist, it will be skip')
+                    continue
+                gen_report_obj = GenOSHtmlReport(ip_addr)
+                gen_report_obj.gen_html_report()
+    # 如果指定文件夹模式
+    elif model == "dir":
+        ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
+        full_reg = f"{ip_reg}_os_info\.xml"
+        pwd_file_list = os.listdir("../2_info")
+        # 当前是针对2_info目录下所有xml进行解析
+        # 如果要针对单个IP，直接指定IP取代这个for循环
+        for file in pwd_file_list:
+            if re.search(full_reg, file):
+                ip_addr = re.search(ip_reg, file).group()
+                gen_report_obj = GenOSHtmlReport(ip_addr)
+                gen_report_obj.gen_html_report()

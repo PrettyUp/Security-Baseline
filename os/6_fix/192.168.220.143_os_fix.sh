@@ -32,7 +32,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\t<item id=""$id"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\t\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\t\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\t\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\t\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -45,16 +45,26 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             
 fixUnnecessaryDevelopTool(){
@@ -62,7 +72,15 @@ fixUnnecessaryDevelopTool(){
     fix_comment="检测编译、调试工具是否存在"
     fix_command="apt-get remove gcc -y;apt-get remove gdb -y;"
     fix_result=`eval $fix_command`
-    appendToXml "$fix_object" "$fix_commgen_shell_script_disable_console_appsand" "$fix_comment" "$fix_result"
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixUnnecessarySoftware(){
+    fix_object="pump、apmd、lsapnptools、redhat-logos、mt-st、kernel-pcmcia-cs、Setserial、redhat-relese、eject、linuxconf、kudzu、gd、bc、getty_ps、raidtools、pciutils、mailcap、setconsole、gnupg、nc"
+    fix_comment=""
+    fix_command="apt-get remove p -y;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
                 
 fixPasswordComplexLimit(){
@@ -92,7 +110,7 @@ fixFilterNetworkService(){
 fixEtcInetdConf(){
     fix_object="/etc/xinetd.conf"
     fix_comment="check inetd config file permit"
-    fix_command="chown root:root /etc/xinetd.conf;chmod 600 /etc/xinetd.conf;"
+    fix_command="chown root:root -;chmod 600 -;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
@@ -100,7 +118,15 @@ fixEtcInetdConf(){
 fixEtcServices(){
     fix_object="/etc/services"
     fix_comment="check /etc/services owner and permit"
-    fix_command="chown root:root /etc/services;chmod 600 /etc/services;"
+    fix_command="chown root:root -;chmod 600 -;"
+    fix_result=`eval $fix_command`
+    appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
+}
+                
+fixEtcServices(){
+    fix_object="tftp、sendmail、finger、uccp、ftp"
+    fix_comment="检测ftp服务进程是否启动"
+    fix_command="kill -9 `ps -ef | grep t | grep -v grep|cut -f 1`;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
@@ -122,7 +148,9 @@ fixNoSpoof(){
 }
                 
 fixDisableSourceRoute(){
-    fix_object="/proc/sys/net/ipv4/conf/default/accept_source_route"
+    fix_object="/proc/sys/net/ipv4/conf/default/accept_source_route
+/proc/sys/net/ipv4/conf/ens33/accept_source_route
+/proc/sys/net/ipv4/conf/lo/accept_source_route"
     fix_comment="check if /proc/sys/net/ipv4/conf/lo/accept_source_route source route have been closed or not"
     fix_command='for f in /proc/sys/net/ipv4/conf/*/accept_source_route; do echo 0 > $f; done'
     fix_result=`eval $fix_command`
@@ -175,11 +203,13 @@ main(){
     main_pre $@
     createReportXml
 		fixUnnecessaryDevelopTool
+		fixUnnecessarySoftware
 		fixPasswordComplexLimit
 		fixPasswordDateLimit
 		fixFilterNetworkService
 		fixEtcInetdConf
 		fixEtcServices
+		fixCloseDangerProcess
 		fixClosePing
 		fixNoSpoof
 		fixDisableSourceRoute

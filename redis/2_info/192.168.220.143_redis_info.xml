@@ -27,13 +27,21 @@ udp6       0      0 :::38209                :::*                                
 		<section id="checkRedisPassword">
 				<item id="0">
 					<check_object>^requirepass\s*\w{1,}</check_object>
-					<check_command>searchValueByReg $CONF_PATH $grep_flag</check_command>
+					<check_command>searchValueByReg /opt/redis-5.0/conf/redis.conf "^requirepass\s*\w{1,}"</check_command>
 					<check_comment>为redis设置密码</check_comment>
+					<check_result>requirepass t*tsrch0st</check_result>
+				</item>
+		</section>
+		<section id="checkRedisDangerCommand">
+				<item id="1">
+					<check_object>^rename-command\s*\w{1,}</check_object>
+					<check_command>searchValueByReg /opt/redis-5.0/conf/redis.conf "^rename-command\s*\w{1,}"</check_command>
+					<check_comment>禁用高危命令FLUSHALL、FLUSHDB、KEYS</check_comment>
 					<check_result>not found</check_result>
 				</item>
 		</section>
 		<section id="checkRedisAddress">
-				<item id="1">
+				<item id="2">
 					<check_object>^bind\s*</check_object>
 					<check_command>searchValueByReg /opt/redis-5.0/conf/redis.conf ^bind\s*</check_command>
 					<check_comment>建议只监听本地地址</check_comment>
@@ -41,15 +49,15 @@ udp6       0      0 :::38209                :::*                                
 				</item>
 		</section>
 		<section id="checkRedisRunner">
-				<item id="2">
+				<item id="3">
 					<check_object>redis-server</check_object>
 					<check_command>ps -ef |grep redis-server|grep -v grep</check_command>
 					<check_comment>禁止以root用户运行</check_comment>
-					<check_result>ls        58423  58422  0 11:07 pts/3    00:00:16 ../bin/redis-server 127.0.0.1:6379</check_result>
+					<check_result>ls        58423  58422  0 11:07 pts/3    00:00:25 ../bin/redis-server 127.0.0.1:6379</check_result>
 				</item>
 		</section>
 		<section id="checkRedisVersion">
-				<item id="3">
+				<item id="4">
 					<check_object>$SERVER_PATH</check_object>
 					<check_command>/opt/redis-5.0/bin/redis-server -v</check_command>
 					<check_comment>确认redis是最新版本</check_comment>

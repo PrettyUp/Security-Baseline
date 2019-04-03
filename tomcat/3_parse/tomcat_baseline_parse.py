@@ -1,13 +1,12 @@
 import os
 import re
-
-
 from lxml import html
 import html
 import lxml
 import sys
 sys.path.append('../../')
 from common.baseline_parse import BaselineParse
+from common.baseline_param_parse import BaselineParamParse
 
 
 class GenTomcatHtmlReport(BaselineParse):
@@ -21,11 +20,11 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "删除示例文档"
         collapse_id = "collapse1"
 
-        current_item=self.xml_obj.xpath("/root/checklist/section[@id='checkExampleDoc']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
-        check_result = current_item.xpath("check_result")[0].text
+        current_item=self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkExampleDoc']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
+        check_result = self.text_xpath(current_item, "check_result")
         if check_result is None:
             card_class = "bg-success text-white"
             self.config_right += 1
@@ -53,10 +52,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "禁用tomcat默认帐号"
         collapse_id = "collapse2"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkDefaultAccount']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkDefaultAccount']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result_item = current_item.xpath("check_result")[0]
         check_result_not_escape = lxml.html.tostring(check_result_item).decode('utf-8')
         start_pos = re.search("<check_result>",check_result_not_escape).end()
@@ -93,10 +92,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "禁止列目录"
         collapse_id = "collapse3"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkListDir']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkListDir']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result_item = current_item.xpath("check_result")[0]
         check_result = ""
         try:
@@ -133,10 +132,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "自定义错误页面"
         collapse_id = "collapse4"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkErrorPage']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkErrorPage']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result = ''
         check_result_item = current_item.xpath("check_result")[0]
 
@@ -172,10 +171,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "开启访问日志"
         collapse_id = "collapse5"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkEnableAccessLog']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkEnableAccessLog']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result_item = current_item.xpath("check_result")[0]
 
         check_result_not_escape = lxml.html.tostring(check_result_item).decode('utf-8')
@@ -205,10 +204,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "隐藏版本号"
         collapse_id = "collapse6"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkServerVersion']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkServerVersion']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result_item = current_item.xpath("check_result")[0]
 
         check_result_not_escape = lxml.html.tostring(check_result_item).decode('utf-8')
@@ -251,10 +250,10 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "修改默认监听端口"
         collapse_id = "collapse7"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkDefaultPort']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkDefaultPort']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
         check_result_item = current_item.xpath("check_result")[0]
 
         check_result_not_escape = lxml.html.tostring(check_result_item).decode('utf-8')
@@ -284,11 +283,11 @@ class GenTomcatHtmlReport(BaselineParse):
         accordion_title = "不以root/admin用户运行程序"
         collapse_id = "collapse8"
 
-        current_item = self.xml_obj.xpath("/root/checklist/section[@id='checkProcessRunner']/item")[0]
-        check_object = current_item.xpath("check_object")[0].text
-        check_command = current_item.xpath("check_command")[0].text
-        check_comment = current_item.xpath("check_comment")[0].text
-        check_result = current_item.xpath("check_result")[0].text
+        current_item = self.node_xpath(self.xml_obj,"/root/checklist/section[@id='checkProcessRunner']/item")[0]
+        check_object = self.text_xpath(current_item, "check_object")
+        check_command = self.text_xpath(current_item, "check_command")
+        check_comment = self.text_xpath(current_item, "check_comment")
+        check_result = self.text_xpath(current_item, "check_result")
         try:
             check_result_dict = check_result.split()
             if check_result_dict[0] == "root":
@@ -328,11 +327,29 @@ class GenTomcatHtmlReport(BaselineParse):
 
 
 if __name__ == "__main__":
-    ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
-    full_reg = f"{ip_reg}_tomcat_info\.xml"
-    pwd_file_list = os.listdir("../2_info")
-    for file in pwd_file_list:
-        if re.search(full_reg, file):
-            ip_addr = re.search(ip_reg, file).group()
-            gen_report_obj = GenTomcatHtmlReport(ip_addr)
-            gen_report_obj.gen_html_report()
+    bpp_obj = BaselineParamParse()
+    model, ip = bpp_obj.param_parse(sys.argv[1:])
+    if model == "ip":
+        # 如果ip模式中未给出ip列出则报错退出
+        if ip is None:
+            bpp_obj.usage()
+            sys.exit(1)
+        else:
+            ip_list = ip.split(",")
+            for ip_addr in ip_list:
+                # 如果指定的ip对应的文件并不存在则跳过
+                if not os.path.exists(f"../2_info/{ip_addr}_tomcat_info.xml"):
+                    print(f'sorry, file "../2_info/{ip_addr}_tmocat_info.xml" is not exist, it will be skip')
+                    continue
+                gen_report_obj = GenTomcatHtmlReport(ip_addr)
+                gen_report_obj.gen_html_report()
+    # 如果指定文件夹模式
+    elif model == "dir":
+        ip_reg = "(\d{1,3}\.{1}){3}\d{1,3}"
+        full_reg = f"{ip_reg}_tomcat_info\.xml"
+        pwd_file_list = os.listdir("../2_info")
+        for file in pwd_file_list:
+            if re.search(full_reg, file):
+                ip_addr = re.search(ip_reg, file).group()
+                gen_report_obj = GenTomcatHtmlReport(ip_addr)
+                gen_report_obj.gen_html_report()

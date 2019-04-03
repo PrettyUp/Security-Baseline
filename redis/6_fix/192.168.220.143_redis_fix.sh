@@ -32,7 +32,7 @@ closeNode(){
 # 各检测项生成报告函数
 appendToXml(){
     echo -e "\t<item id=""$id"">" >> $xml_file_name
-    echo -e "<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
+    echo -e "\t\t<fix_time>$(date  +'%Y-%m-%d 星期%w %H:%M:%S')</fix_time>" >> $xml_file_name
     echo -e "\t\t<fix_object>$1</fix_object>" >> $xml_file_name
     echo -e "\t\t<fix_command>$2</fix_command>" >> $xml_file_name
     echo -e "\t\t<fix_comment>$3</fix_comment>" >> $xml_file_name
@@ -45,22 +45,32 @@ appendToXml(){
 searchValueByReg(){
     file_name=$1
     regexp=$2
-    cat $file_name | while read line
+    found_flag="0"
+    if ! [ -e $file_name ]
+    then
+        echo "file $file_name not found"
+        return 1
+    fi
+    while read line
     do
         result=`echo $line | grep -E $regexp`
         if [ -n "$result" ]
         then
+            found_flag="1"
             echo "$result"
             break
         fi
-    done
-    echo "not found"
+    done <<< "$(cat $file_name)"
+    if [ $found_flag == "0" ]
+    then
+        echo "not found"
+    fi
 }
             
-fixMysqlRunner(){
-    fix_object="^requirepass\s*\w{1,}"
-    fix_comment="为redis设置密码"
-    fix_command="echo -e \"requirepass $PASSWORD\" >> $CONF_PATH"
+fixRedisDangerCommand(){
+    fix_object="^rename-command\s*\w{1,}"
+    fix_comment="禁用高危命令FLUSHALL、FLUSHDB、KEYS"
+    fix_command="echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHALL \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command FLUSHDB \\\"\\\"\" >> $CONF_PATH;echo -e \"rename-command KEYS \\\"\\\"\" >> $CONF_PATH;"
     fix_result=`eval $fix_command`
     appendToXml "$fix_object" "$fix_command" "$fix_comment" "$fix_result"
 }
@@ -121,7 +131,7 @@ main_pre(){
 main(){
     main_pre $@
     createReportXml
-		fixMysqlRunner
+		fixRedisDangerCommand
 	closeReportXml
 }
 

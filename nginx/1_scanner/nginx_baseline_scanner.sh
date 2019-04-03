@@ -130,8 +130,6 @@ checkLocationIpWhiteList(){
 		result="Location not found"
 	fi
 	appendToXml "$config_file_name" "$check_command" "$check_comment" "$result"
-
-
 }
 
 
@@ -155,19 +153,18 @@ checkAutoindex(){
 usage(){
   echo "
 Usage:
-  -i, --ip	target machine ip
   -d, --dir	target software home dir
   -h, --help	display this help and exit
 
   example1: bash tomcat_baseline_scanner.sh
-  example2: bash tomcat_baseline_scanner.sh -i ip_addr -dir home_dir
-  example3: bash tomcat_baseline_scanner.sh --ip ip_addr --dir home_dir
+  example2: bash tomcat_baseline_scanner.sh -d home_dir
+  example3: bash tomcat_baseline_scanner.sh --dir home_dir
 "
 }
 
 main_pre(){
     # set -- $(getopt i:p:h "$@")
-    set -- $(getopt -o i:d:h --long ip:,dir:,help -- "$@")
+    set -- $(getopt -o d:h --long dir:,help -- "$@")
     ipaddr=`ifconfig|grep 'inet'|grep -v '127.0.0.1'|awk '{print $2}'|cut -d':' -f 2`
     CATALINA_HOME='/usr/local/nginx'
     id=0

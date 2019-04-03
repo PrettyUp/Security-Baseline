@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<hostinfo>
+		<hostname>tvt</hostname>
+		<ipaddr>10.10.7.1</ipaddr>
+		<os_version>	Ubuntu 16.04.4 LTS</os_version>
+		<kernel_version>4.4.0-116-generic</kernel_version>
+		<tcp_services>tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1328/sshd       
+tcp        0      0 127.0.0.1:32000         0.0.0.0:*               LISTEN      23025/java      
+tcp        0      0 0.0.0.0:10050           0.0.0.0:*               LISTEN      27367/zabbix_agentd
+tcp        0      0 10.10.7.1:3306          0.0.0.0:*               LISTEN      22441/mysqld    
+tcp6       0      0 :::22                   :::*                    LISTEN      1328/sshd       
+tcp6       0      0 :::7065                 :::*                    LISTEN      9296/java       
+tcp6       0      0 :::7005                 :::*                    LISTEN      9378/java       
+tcp6       0      0 :::42973                :::*                    LISTEN      23025/java      
+tcp6       0      0 :::7071                 :::*                    LISTEN      9331/java       
+tcp6       0      0 :::1984                 :::*                    LISTEN      23025/java      
+tcp6       0      0 :::10050                :::*                    LISTEN      27367/zabbix_agentd
+tcp6       0      0 :::8066                 :::*                    LISTEN      23025/java      
+tcp6       0      0 :::9066                 :::*                    LISTEN      23025/java      
+tcp6       0      0 :::36176                :::*                    LISTEN      23025/java      
+tcp6       0      0 :::1234                 :::*                    LISTEN      2010/java       </tcp_services>
+		<udp_services>udp        0      0 0.0.0.0:57693           0.0.0.0:*                           943/systemd-timesyn</udp_services>
+	</hostinfo>
+	<checklist>
+		<section id="checkMysqlRunner">
+				<item id="0">
+					<check_object>mysqld</check_object>
+					<check_command>ps -ef |grep mysqld|grep -v grep</check_command>
+					<check_comment>禁止以root用户运行</check_comment>
+					<check_result>mysql    22441     1  0 Mar22 ?        00:04:49 /usr/sbin/mysqld</check_result>
+				</item>
+		</section>
+		<section id="checkMysqlMaxConnections">
+				<item id="1">
+					<check_object>show variables like 'max_connections';</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "show variables like 'max_connections';"</check_command>
+					<check_comment>设置最大连接数限制</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNullTestAccount">
+				<item id="2">
+					<check_object>select user,host,authentication_string from mysql.user where user = '' or user='test';</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "select user,host,authentication_string from mysql.user where user = '' or user='test';"</check_command>
+					<check_comment>检测是否存在空账号或test账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlNoPassword">
+				<item id="3">
+					<check_object>select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "select user,host,authentication_string from mysql.user where length(authentication_string) = 0 or authentication_string is null;"</check_command>
+					<check_comment>检测是否存在密码为空的账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlAccount">
+				<item id="4">
+					<check_object>select user,host,authentication_string from mysql.user;</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "select user,host,authentication_string from mysql.user;"</check_command>
+					<check_comment>分角色创建账号同时删除不必要的账号</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlLog">
+				<item id="5">
+					<check_object>show variables like \"log_%\";</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "show variables like \"log_%\";"</check_command>
+					<check_comment>开启日志</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+		<section id="checkMysqlVersion">
+				<item id="6">
+					<check_object>select VERSION();</check_object>
+					<check_command>mysql -h'10.10.7.1' -P'/etc/mysql/mysql.conf.d/' -u'-p' -ptoor -e "select VERSION();"</check_command>
+					<check_comment>确认mysql是最新版本</check_comment>
+					<check_result></check_result>
+				</item>
+		</section>
+	</checklist>
+</root>
